@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Blood Bank System</title>
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #e53935;
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #ffcdd2;
+        }
+
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(229, 57, 53, 0.8), rgba(229, 57, 53, 0.8)), url('/api/placeholder/1200/400') no-repeat center;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Contact Sections */
+        .contact-sections {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: #e53935;
+            font-size: 2rem;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .contact-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .contact-card h3 {
+            color: #e53935;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .contact-card h3 i {
+            margin-right: 10px;
+            font-size: 1.8rem;
+        }
+
+        .contact-card p {
+            margin-bottom: 0.8rem;
+        }
+
+        .contact-card a {
+            color: #e53935;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            margin-top: 1rem;
+        }
+
+        .contact-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Form Styles */
+        .contact-form {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-control:focus {
+            border-color: #e53935;
+            outline: none;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #e53935;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 4px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #c62828;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .footer-section p {
+            margin-bottom: 0.8rem;
+        }
+
+        .social-links {
+            display: flex;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 35px;
+            height: 35px;
+            background: #e53935;
+            color: white;
+            border-radius: 50%;
+            margin-right: 10px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #c62828;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 2rem;
+            border-top: 1px solid #444;
+            padding-top: 1rem;
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Registration Form */
+        .registration-form {
+            display: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #555;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: #e53935;
+                padding: 1rem 0;
+                z-index: 100;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links li {
+                margin: 10px 0;
+                text-align: center;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <div class="container">
+            <nav>
+                <div class="logo">
+                    <i class="fas fa-heartbeat"></i>
+                    BloodConnect
+                </div>
+                <ul class="nav-links">
+                    <li><a href="A.html">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="D.html">Donors</a></li>
+                    <li><a href="e.html">Recipients</a></li>
+                    <li><a href="c.html">Blood Banks</a></li>
+                    <li><a href="g.html">Contact</a></li>
+                </ul>
+                <button class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <p>Get in touch with our team, connect with blood donors, recipients, or blood banks. Your queries and feedback are important to us.</p>
+        </div>
+    </section>
+
+    <!-- Contact Sections -->
+    <section class="contact-sections">
+        <div class="container">
+            <h2 class="section-title">How Can We Help You?</h2>
+            
+            <div class="contact-grid">
+                <!-- Blood Banks Card -->
+                <div class="contact-card">
+                    <h3><i class="fas fa-hospital"></i> Blood Banks</h3>
+                    <p>Connect with registered blood banks in your area for blood donations, requirements, or partnership opportunities.</p>
+                    <p><strong>Available Hours:</strong> 24/7</p>
+                    <p><strong>Emergency Hotline:</strong> +1 (800) 123-4567</p>
+                    <a href="#" id="blood-bank-register">Register Your Blood Bank</a>
+                    <a href="#" id="find-blood-bank">Find a Blood Bank</a>
+                </div>
+                
+                <!-- Donors Card -->
+                <div class="contact-card">
+                    <h3><i class="fas fa-hand-holding-heart"></i> Blood Donors</h3>
+                    <p>Register as a donor, find donation camps, or get information about the donation process and eligibility.</p>
+                    <p><strong>Donor Helpline:</strong> +1 (800) 765-4321</p>
+                    <p><strong>Email:</strong> donors@bloodconnect.org</p>
+                    <a href="#" id="donor-register">Register as a Donor</a>
+                    <a href="#" id="donation-camps">Find Donation Camps</a>
+                </div>
+                
+                <!-- Recipients Card -->
+                <div class="contact-card">
+                    <h3><i class="fas fa-user-plus"></i> Recipients</h3>
+                    <p>Request blood in emergencies, find donors of your blood type, or get assistance with blood transfusion.</p>
+                    <p><strong>Emergency Request:</strong> +1 (800) 999-8888</p>
+                    <p><strong>Email:</strong> recipients@bloodconnect.org</p>
+                    <a href="#" id="recipient-register">Register as a Recipient</a>
+                    <a href="#" id="emergency-request">Emergency Blood Request</a>
+                </div>
+            </div>
+            
+            <!-- Contact Form -->
+            <h2 class="section-title">Send Us a Message</h2>
+            <div class="contact-form">
+                <div class="status-message success" id="success-message">
+                    Your message has been sent successfully! We'll get back to you soon.
+                </div>
+                <div class="status-message error" id="error-message">
+                    There was an error sending your message. Please try again.
+                </div>
+                
+                <form id="contact-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <select id="subject" class="form-control" required>
+                                <option value="">Select a subject</option>
+                                <option value="donation">Blood Donation</option>
+                                <option value="request">Blood Request</option>
+                                <option value="blood-bank">Blood Bank Inquiry</option>
+                                <option value="partnership">Partnership Opportunities</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" class="form-control" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Donor Registration Form Modal -->
+    <div class="overlay" id="donor-overlay"></div>
+    <div class="registration-form" id="donor-form">
+        <button class="close-btn" id="donor-close"><i class="fas fa-times"></i></button>
+        <h2>Register as a Blood Donor</h2>
+        <div class="status-message success" id="donor-success">
+            Registration successful! Thank you for your willingness to save lives.
+        </div>
+        <div class="status-message error" id="donor-error">
+            Registration failed. Please try again.
+        </div>
+        
+        <form id="donor-registration-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="donor-name">Full Name</label>
+                    <input type="text" id="donor-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="donor-email">Email Address</label>
+                    <input type="email" id="donor-email" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="donor-phone">Phone Number</label>
+                    <input type="tel" id="donor-phone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="donor-age">Age</label>
+                    <input type="number" id="donor-age" min="18" max="65" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="donor-blood-type">Blood Type</label>
+                    <select id="donor-blood-type" class="form-control" required>
+                        <option value="">Select Blood Type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="donor-gender">Gender</label>
+                    <select id="donor-gender" class="form-control" required>
+                        <option value="">Select Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="donor-address">Address</label>
+                <textarea id="donor-address" class="form-control" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="donor-terms" required>
+                    I confirm that I am eligible to donate blood and agree to the terms and conditions.
+                </label>
+            </div>
+            
+            <button type="submit" class="btn">Register</button>
+        </form>
+    </div>
+
+    <!-- Recipient Registration Form Modal -->
+    <div class="overlay" id="recipient-overlay"></div>
+    <div class="registration-form" id="recipient-form">
+        <button class="close-btn" id="recipient-close"><i class="fas fa-times"></i></button>
+        <h2>Register as a Blood Recipient</h2>
+        <div class="status-message success" id="recipient-success">
+            Registration successful! We'll connect you with suitable donors.
+        </div>
+        <div class="status-message error" id="recipient-error">
+            Registration failed. Please try again.
+        </div>
+        
+        <form id="recipient-registration-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="recipient-name">Patient Name</label>
+                    <input type="text" id="recipient-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipient-email">Email Address</label>
+                    <input type="email" id="recipient-email" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="recipient-phone">Contact Number</label>
+                    <input type="tel" id="recipient-phone" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipient-blood-type">Required Blood Type</label>
+                    <select id="recipient-blood-type" class="form-control" required>
+                        <option value="">Select Blood Type</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="recipient-units">Units Required</label>
+                    <input type="number" id="recipient-units" min="1" max="10" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="recipient-urgency">Urgency Level</label>
+                    <select id="recipient-urgency" class="form-control" required>
+                        <option value="">Select Urgency</option>
+                        <option value="emergency">Emergency (Within 24 hours)</option>
+                        <option value="urgent">Urgent (2-3 days)</option>
+                        <option value="scheduled">Scheduled (Within a week)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="recipient-hospital">Hospital Name & Address</label>
+                <textarea id="recipient-hospital" class="form-control" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="recipient-details">Additional Details</label>
+                <textarea id="recipient-details" class="form-control"></textarea>
+            </div>
+            
+            <button type="submit" class="btn">Submit Request</button>
+        </form>
+    </div>
+
+    <!-- Blood Bank Registration Form Modal -->
+    <div class="overlay" id="blood-bank-overlay"></div>
+    <div class="registration-form" id="blood-bank-form">
+        <button class="close-btn" id="blood-bank-close"><i class="fas fa-times"></i></button>
+        <h2>Register Your Blood Bank</h2>
+        <div class="status-message success" id="blood-bank-success">
+            Blood bank registered successfully! We'll review your information.
+        </div>
+        <div class="status-message error" id="blood-bank-error">
+            Registration failed. Please try again.
+        </div>
+        
+        <form id="blood-bank-registration-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="bank-name">Blood Bank Name</label>
+                    <input type="text" id="bank-name" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="bank-license">License Number</label>
+                    <input type="text" id="bank-license" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="bank-email">Email Address</label>
+                    <input type="email" id="bank-email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="bank-phone">Contact Number</label>
+                    <input type="tel" id="bank-phone" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="bank-address">Complete Address</label>
+                <textarea id="bank-address" class="form-control" required></textarea>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="bank-contact-person">Contact Person Name</label>
+                    <input type="text" id="bank-contact-person" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="bank-capacity">Storage Capacity (Units)</label>
+                    <input type="number" id="bank-capacity" min="1" class="form-control" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="bank-services">Services Offered</label>
+                <textarea id="bank-services" class="form-control" required placeholder="E.g., Blood collection, testing, component separation, storage, distribution..."></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label>Available Blood Types</label>
+                <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                    <label><input type="checkbox" name="blood-types" value="A+"> A+</label>
+                    <label><input type="checkbox" name="blood-types" value="A-"> A-</label>
+                    <label><input type="checkbox" name="blood-types" value="B+"> B+</label>
+                    <label><input type="checkbox" name="blood-types" value="B-"> B-</label>
+                    <label><input type="checkbox" name="blood-types" value="AB+"> AB+</label>
+                    <label><input type="checkbox" name="blood-types" value="AB-"> AB-</label>
+                    <label><input type="checkbox" name="blood-types" value="O+"> O+</label>
+                    <label><input type="checkbox" name="blood-types" value="O-"> O-</label>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="bank-terms" required>
+                    I confirm that all information provided is accurate and our blood bank follows all relevant regulations and standards.
+                </label>
+            </div>
+            
+            <button type="submit" class="btn">Register Blood Bank</button>
+        </form>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>BloodConnect</h3>
+                    <p>Connecting donors with recipients to save lives. Our mission is to ensure that everyone in need has access to safe blood.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <p><a href="#" style="color: white; text-decoration: none;">Home</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">About Us</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Donate Blood</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Find Blood</a></p>
+                    <p><a href="#" style="color: white; text-decoration: none;">Blood Banks</a></p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 123 Medical Plaza, Healthcare City</p>
+                    <p><i class="fas fa-phone"></i> +1 (800) 123-4567</p>
+                    <p><i class="fas fa-envelope"></i> info@bloodconnect.org</p>
+                    <p><i class="fas fa-clock"></i> Available 24/7 for emergencies</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 BloodConnect. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+       // Mobile menu toggle
+document.querySelector('.hamburger').addEventListener('click', function() {
+    document.querySelector('.nav-links').classList.toggle('active');
+});
+
+// Contact form submission
+document.getElementById('contact-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validate form
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+    const message = document.getElementById('message').value;
+    
+    if (name && email && message) {
+        // Simulate form submission with success
+        setTimeout(() => {
+            document.getElementById('success-message').style.display = 'block';
+            document.getElementById('error-message').style.display = 'none';
+            document.getElementById('contact-form').reset();
+            
+            // Hide success message after 5 seconds
+            setTimeout(() => {
+                document.getElementById('success-message').style.display = 'none';
+            }, 5000);
+        }, 1000);
+    } else {
+        document.getElementById('error-message').style.display = 'block';
+        document.getElementById('success-message').style.display = 'none';
+    }
+});
+
+// Donor registration modal
+document.getElementById('donor-register').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('donor-overlay').style.display = 'block';
+    document.getElementById('donor-form').style.display = 'block';
+});
+
+document.getElementById('donor-close').addEventListener('click', function() {
+    document.getElementById('donor-overlay').style.display = 'none';
+    document.getElementById('donor-form').style.display = 'none';
+    document.getElementById('donor-success').style.display = 'none';
+    document.getElementById('donor-error').style.display = 'none';
+    document.getElementById('donor-registration-form').reset();
+});
+
+document.getElementById('donor-registration-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validate form
+    const name = document.getElementById('donor-name').value;
+    const email = document.getElementById('donor-email').value;
+    const phone = document.getElementById('donor-phone').value;
+    const bloodType = document.getElementById('donor-blood-type').value;
+    const termsChecked = document.getElementById('donor-terms').checked;
+    
+    if (name && email && phone && bloodType && termsChecked) {
+        // Simulate form submission with success
+        setTimeout(() => {
+            document.getElementById('donor-success').style.display = 'block';
+            document.getElementById('donor-error').style.display = 'none';
+            document.getElementById('donor-registration-form').reset();
+            
+            // Hide form after 3 seconds
+            setTimeout(() => {
+                document.getElementById('donor-overlay').style.display = 'none';
+                document.getElementById('donor-form').style.display = 'none';
+                document.getElementById('donor-success').style.display = 'none';
+            }, 3000);
+        }, 1000);
+    } else {
+        document.getElementById('donor-error').style.display = 'block';
+        document.getElementById('donor-success').style.display = 'none';
+    }
+});
+
+// Recipient registration modal
+document.getElementById('recipient-register').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('recipient-overlay').style.display = 'block';
+    document.getElementById('recipient-form').style.display = 'block';
+});
+
+document.getElementById('recipient-close').addEventListener('click', function() {
+    document.getElementById('recipient-overlay').style.display = 'none';
+    document.getElementById('recipient-form').style.display = 'none';
+    document.getElementById('recipient-success').style.display = 'none';
+    document.getElementById('recipient-error').style.display = 'none';
+    document.getElementById('recipient-registration-form').reset();
+});
+
+document.getElementById('recipient-registration-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validate form
+    const name = document.getElementById('recipient-name').value;
+    const email = document.getElementById('recipient-email').value;
+    const phone = document.getElementById('recipient-phone').value;
+    const bloodType = document.getElementById('recipient-blood-type').value;
+    const units = document.getElementById('recipient-units').value;
+    const urgency = document.getElementById('recipient-urgency').value;
+    const hospital = document.getElementById('recipient-hospital').value;
+    
+    if (name && email && phone && bloodType && units && urgency && hospital) {
+        // Simulate form submission with success
+        setTimeout(() => {
+            document.getElementById('recipient-success').style.display = 'block';
+            document.getElementById('recipient-error').style.display = 'none';
+            document.getElementById('recipient-registration-form').reset();
+            
+            // Hide form after 3 seconds
+            setTimeout(() => {
+                document.getElementById('recipient-overlay').style.display = 'none';
+                document.getElementById('recipient-form').style.display = 'none';
+                document.getElementById('recipient-success').style.display = 'none';
+            }, 3000);
+        }, 1000);
+    } else {
+        document.getElementById('recipient-error').style.display = 'block';
+        document.getElementById('recipient-success').style.display = 'none';
+    }
+});
+
+// Blood Bank registration modal
+document.getElementById('blood-bank-register').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('blood-bank-overlay').style.display = 'block';
+    document.getElementById('blood-bank-form').style.display = 'block';
+});
+
+document.getElementById('blood-bank-close').addEventListener('click', function() {
+    document.getElementById('blood-bank-overlay').style.display = 'none';
+    document.getElementById('blood-bank-form').style.display = 'none';
+    document.getElementById('blood-bank-success').style.display = 'none';
+    document.getElementById('blood-bank-error').style.display = 'none';
+    document.getElementById('blood-bank-registration-form').reset();
+});
+
+document.getElementById('blood-bank-registration-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Validate form
+    const bankName = document.getElementById('bank-name').value;
+    const license = document.getElementById('bank-license').value;
+    const email = document.getElementById('bank-email').value;
+    const phone = document.getElementById('bank-phone').value;
+    const address = document.getElementById('bank-address').value;
+    const termsChecked = document.getElementById('bank-terms').checked;
+    
+    if (bankName && license && email && phone && address && termsChecked) {
+        // Simulate form submission with success
+        setTimeout(() => {
+            document.getElementById('blood-bank-success').style.display = 'block';
+            document.getElementById('blood-bank-error').style.display = 'none';
+            document.getElementById('blood-bank-registration-form').reset();
+            
+            // Hide form after 3 seconds
+            setTimeout(() => {
+                document.getElementById('blood-bank-overlay').style.display = 'none';
+                document.getElementById('blood-bank-form').style.display = 'none';
+                document.getElementById('blood-bank-success').style.display = 'none';
+            }, 3000);
+        }, 1000);
+    } else {
+        document.getElementById('blood-bank-error').style.display = 'block';
+        document.getElementById('blood-bank-success').style.display = 'none';
+    }
+});
+
+// Emergency Blood Request modal handler
+document.getElementById('emergency-request').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Redirect to emergency request section or open modal
+    document.getElementById('recipient-overlay').style.display = 'block';
+    document.getElementById('recipient-form').style.display = 'block';
+    // Pre-select emergency urgency
+    document.getElementById('recipient-urgency').value = 'emergency';
+});
+
+// Find Blood Bank handler
+document.getElementById('find-blood-bank').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Could redirect to a map page or show a listing
+    alert('Redirecting to Blood Bank Locator page');
+});
+
+// Find Donation Camps handler
+document.getElementById('donation-camps').addEventListener('click', function(e) {
+    e.preventDefault();
+    // Could redirect to a camps listing page
+    alert('Redirecting to Donation Camps page');
+});
+
+// Close modals when clicking on overlay
+document.getElementById('donor-overlay').addEventListener('click', function() {
+    document.getElementById('donor-overlay').style.display = 'none';
+    document.getElementById('donor-form').style.display = 'none';
+});
+
+document.getElementById('recipient-overlay').addEventListener('click', function() {
+    document.getElementById('recipient-overlay').style.display = 'none';
+    document.getElementById('recipient-form').style.display = 'none';
+});
+
+document.getElementById('blood-bank-overlay').addEventListener('click', function() {
+    document.getElementById('blood-bank-overlay').style.display = 'none';
+    document.getElementById('blood-bank-form').style.display = 'none';
+});
+
+// Prevent modal closing when clicking on the form itself
+document.getElementById('donor-form').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+
+document.getElementById('recipient-form').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+
+document.getElementById('blood-bank-form').addEventListener('click', function(e) {
+    e.stopPropagation();
+});
+
+// Form validation helper functions
+function validateEmail(email) {
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
+
+function validatePhone(phone) {
+    const re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/;
+    return re.test(String(phone));
+}
+
+// Add form validation to input fields
+const emailInputs = document.querySelectorAll('input[type="email"]');
+emailInputs.forEach(input => {
+    input.addEventListener('blur', function() {
+        if (this.value && !validateEmail(this.value)) {
+            this.style.borderColor = '#e53935';
+        } else {
+            this.style.borderColor = '';
+        }
+    });
+});
+
+const phoneInputs = document.querySelectorAll('input[type="tel"]');
+phoneInputs.forEach(input => {
+    input.addEventListener('blur', function() {
+        if (this.value && !validatePhone(this.value)) {
+            this.style.borderColor = '#e53935';
+        } else {
+            this.style.borderColor = '';
+        }
+    });
+});
+
+// Add blood type compatibility information
+const bloodTypeInfoBtns = document.querySelectorAll('select[id$="-blood-type"]');
+bloodTypeInfoBtns.forEach(select => {
+    select.addEventListener('change', function() {
+        const selectedType = this.value;
+        let compatibleInfo = '';
+        
+        if (selectedType === 'O-') {
+            compatibleInfo = 'O- is a universal donor type that can donate to all blood types.';
+        } else if (selectedType === 'AB+') {
+            compatibleInfo = 'AB+ is a universal recipient type that can receive blood from all types.';
+        }
+        
+        if (compatibleInfo && !document.getElementById('blood-type-info')) {
+            const infoDiv = document.createElement('div');
+            infoDiv.id = 'blood-type-info';
+            infoDiv.style.marginTop = '5px';
+            infoDiv.style.fontSize = '0.8rem';
+            infoDiv.style.color = '#e53935';
+            infoDiv.textContent = compatibleInfo;
+            this.parentNode.appendChild(infoDiv);
+        } else if (document.getElementById('blood-type-info')) {
+            if (compatibleInfo) {
+                document.getElementById('blood-type-info').textContent = compatibleInfo;
+            } else {
+                document.getElementById('blood-type-info').remove();
+            }
+        }
+    });
+});
+</script>
+</body>
+</html>

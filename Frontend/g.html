@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Blood Bank Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: #e53935;
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            color: white;
+            font-size: 28px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+        
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        
+        nav a:hover, nav a.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .page-title {
+            margin: 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e53935;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .notification-filters {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .filter-btn {
+            padding: 8px 15px;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: #e53935;
+            color: white;
+            border-color: #e53935;
+        }
+        
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .notification-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: flex;
+            gap: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid #e53935;
+            position: relative;
+        }
+        
+        .notification-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .notification-card.unread {
+            background-color: #fff9f9;
+        }
+        
+        .notification-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #ffebee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .notification-icon i {
+            color: #e53935;
+            font-size: 24px;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .notification-message {
+            color: #666;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        
+        .notification-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .notification-actions {
+            margin-top: 10px;
+        }
+        
+        .notification-btn {
+            background-color: transparent;
+            border: none;
+            color: #e53935;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-size: 0.9em;
+            margin-right: 10px;
+            transition: background-color 0.3s;
+            border-radius: 4px;
+        }
+        
+        .notification-btn:hover {
+            background-color: #ffebee;
+        }
+        
+        .unread-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 10px;
+            height: 10px;
+            background-color: #e53935;
+            border-radius: 50%;
+        }
+        
+        /* Emergency notification */
+        .notification-card.emergency {
+            border-left-color: #d32f2f;
+            background-color: #ffebee;
+        }
+        
+        .notification-card.emergency .notification-icon {
+            background-color: #ffcdd2;
+        }
+        
+        .notification-card.emergency .notification-icon i {
+            color: #d32f2f;
+        }
+        
+        /* Donation drive notification */
+        .notification-card.drive {
+            border-left-color: #4caf50;
+        }
+        
+        .notification-card.drive .notification-icon {
+            background-color: #e8f5e9;
+        }
+        
+        .notification-card.drive .notification-icon i {
+            color: #4caf50;
+        }
+        
+        /* Update notification */
+        .notification-card.update {
+            border-left-color: #2196f3;
+        }
+        
+        .notification-card.update .notification-icon {
+            background-color: #e3f2fd;
+        }
+        
+        .notification-card.update .notification-icon i {
+            color: #2196f3;
+        }
+        
+        .empty-state {
+            padding: 40px;
+            text-align: center;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            display: none;
+        }
+        
+        .empty-state i {
+            font-size: 50px;
+            color: #ddd;
+            margin-bottom: 20px;
+        }
+        
+        .empty-state h3 {
+            margin-bottom: 10px;
+            color: #666;
+        }
+        
+        .empty-state p {
+            color: #888;
+        }
+        
+        .preferences-btn {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .preferences-btn:hover {
+            background-color: #c62828;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .notification-filters {
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            
+            .notification-card {
+                flex-direction: column;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+        
+        /* Modal for notification preferences */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            animation: modalFadeIn 0.3s;
+        }
+        
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #888;
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .preference-group {
+            margin-bottom: 20px;
+        }
+        
+        .preference-title {
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+        
+        .preference-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .preference-option input {
+            margin-right: 10px;
+        }
+        
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+        }
+        
+        .save-preferences {
+            background-color: #e53935;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .save-preferences:hover {
+            background-color: #c62828;
+        }
+        
+        /* Mark all as read button */
+        .mark-all-read {
+            background-color: transparent;
+            border: 1px solid #e53935;
+            color: #e53935;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .mark-all-read:hover {
+            background-color: #ffebee;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>BloodCare</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="A.html">Home</a></li>
+                    <li><a href="d.html">Donations</a></li>
+                    <li><a href="c.html">Inventory</a></li>
+                    <li><a href="g.html" class="active">Notifications</a></li>
+                    <li><a href="h.html">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="page-title">
+            <h1>Notifications</h1>
+            <div>
+                <button class="mark-all-read" id="markAllRead">Mark all as read</button>
+                <button class="preferences-btn" id="openPreferences">Preferences</button>
+            </div>
+        </div>
+
+        <div class="notification-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="emergency">Emergency Alerts</button>
+            <button class="filter-btn" data-filter="drive">Donation Drives</button>
+            <button class="filter-btn" data-filter="update">Updates</button>
+            <button class="filter-btn" data-filter="unread">Unread</button>
+        </div>
+
+        <div class="notification-list" id="notificationList">
+            <!-- Notification cards will be dynamically inserted here -->
+        </div>
+
+        <div class="empty-state" id="emptyState">
+            <i class="fas fa-bell-slash"></i>
+            <h3>No notifications</h3>
+            <p>You're all caught up! We'll notify you when there's something new.</p>
+        </div>
+
+        <!-- Notification Preferences Modal -->
+        <div class="modal" id="preferencesModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Notification Preferences</h2>
+                    <button class="close-modal" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="preference-group">
+                        <h3 class="preference-title">Notification Types</h3>
+                        <div class="preference-option">
+                            <input type="checkbox" id="emergency_alerts" checked>
+                            <label for="emergency_alerts">Emergency Blood Requests</label>
+                        </div>
+                        <div class="preference-option">
+                            <input type="checkbox" id="donation_drives" checked>
+                            <label for="donation_drives">Donation Drive Announcements</label>
+                        </div>
+                        <div class="preference-option">
+                            <input type="checkbox" id="inventory_updates" checked>
+                            <label for="inventory_updates">Inventory Status Updates</label>
+                        </div>
+                        <div class="preference-option">
+                            <input type="checkbox" id="system_updates" checked>
+                            <label for="system_updates">System Updates</label>
+                        </div>
+                    </div>
+
+                    <div class="preference-group">
+                        <h3 class="preference-title">Delivery Methods</h3>
+                        <div class="preference-option">
+                            <input type="checkbox" id="in_app" checked>
+                            <label for="in_app">In-App Notifications</label>
+                        </div>
+                        <div class="preference-option">
+                            <input type="checkbox" id="email" checked>
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="preference-option">
+                            <input type="checkbox" id="sms">
+                            <label for="sms">SMS</label>
+                        </div>
+                    </div>
+
+                    <div class="preference-group">
+                        <h3 class="preference-title">Frequency</h3>
+                        <div class="preference-option">
+                            <input type="radio" name="frequency" id="real_time" checked>
+                            <label for="real_time">Real-time</label>
+                        </div>
+                        <div class="preference-option">
+                            <input type="radio" name="frequency" id="daily">
+                            <label for="daily">Daily digest</label>
+                        </div>
+                        <div class="preference-option">
+                            <input type="radio" name="frequency" id="weekly">
+                            <label for="weekly">Weekly digest</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="save-preferences" id="savePreferences">Save Preferences</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Sample notification data
+        const notifications = [
+            {
+                id: 1,
+                type: 'emergency',
+                title: 'Urgent: Blood Type O- Needed',
+                message: 'Critical shortage of O- blood type at City Hospital. Please donate if eligible.',
+                date: 'Just now',
+                isUnread: true,
+                action: {
+                    text: 'Respond',
+                    url: '#respond'
+                }
+            },
+            {
+                id: 2,
+                type: 'drive',
+                title: 'Blood Donation Drive',
+                message: 'Join our blood donation drive this Saturday at Central Community Center from 9 AM to 5 PM.',
+                date: '2 hours ago',
+                isUnread: true,
+                action: {
+                    text: 'RSVP',
+                    url: '#rsvp'
+                }
+            },
+            {
+                id: 3,
+                type: 'update',
+                title: 'Inventory Update',
+                message: 'Blood type AB+ is now well-stocked. Thank you to all donors who contributed!',
+                date: 'Yesterday',
+                isUnread: false,
+                action: {
+                    text: 'View Inventory',
+                    url: '#inventory'
+                }
+            },
+            {
+                id: 4,
+                type: 'update',
+                title: 'New Feature Added',
+                message: 'You can now schedule recurring donations through the app. Check out the new scheduling feature!',
+                date: '3 days ago',
+                isUnread: false,
+                action: {
+                    text: 'Try it now',
+                    url: '#schedule'
+                }
+            },
+            {
+                id: 5,
+                type: 'drive',
+                title: 'Corporate Blood Drive',
+                message: 'TechCorp is hosting a blood drive for employees on Tuesday. Registration is open for volunteers and staff.',
+                date: '1 week ago',
+                isUnread: false,
+                action: {
+                    text: 'Sign up',
+                    url: '#signup'
+                }
+            },
+            {
+                id: 6,
+                type: 'emergency',
+                title: 'Blood Type B+ Needed',
+                message: 'Memorial Hospital has requested additional B+ blood for scheduled surgeries. Please donate if eligible.',
+                date: '1 week ago',
+                isUnread: false,
+                action: {
+                    text: 'Respond',
+                    url: '#respond'
+                }
+            }
+        ];
+
+        // DOM elements
+        const notificationList = document.getElementById('notificationList');
+        const emptyState = document.getElementById('emptyState');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const markAllReadBtn = document.getElementById('markAllRead');
+        const preferencesBtn = document.getElementById('openPreferences');
+        const preferencesModal = document.getElementById('preferencesModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const savePreferencesBtn = document.getElementById('savePreferences');
+
+        // Function to render notifications
+        function renderNotifications(filter = 'all') {
+            let filteredNotifications = [...notifications];
+            
+            // Apply filters
+            if (filter !== 'all') {
+                filteredNotifications = notifications.filter(notification => {
+                    if (filter === 'unread') {
+                        return notification.isUnread;
+                    } else {
+                        return notification.type === filter;
+                    }
+                });
+            }
+            
+            // Clear current list
+            notificationList.innerHTML = '';
+            
+            // Show empty state if no notifications
+            if (filteredNotifications.length === 0) {
+                emptyState.style.display = 'block';
+                return;
+            } else {
+                emptyState.style.display = 'none';
+            }
+            
+            // Render notifications
+            filteredNotifications.forEach(notification => {
+                const card = document.createElement('div');
+                card.className = `notification-card ${notification.type} ${notification.isUnread ? 'unread' : ''}`;
+                card.dataset.id = notification.id;
+                
+                // Set the icon based on notification type
+                let icon = '';
+                switch (notification.type) {
+                    case 'emergency':
+                        icon = 'exclamation-circle';
+                        break;
+                    case 'drive':
+                        icon = 'calendar-alt';
+                        break;
+                    case 'update':
+                        icon = 'info-circle';
+                        break;
+                    default:
+                        icon = 'bell';
+                }
+                
+                card.innerHTML = `
+                    ${notification.isUnread ? '<div class="unread-indicator"></div>' : ''}
+                    <div class="notification-icon">
+                        <i class="fas fa-${icon}"></i>
+                    </div>
+                    <div class="notification-content">
+                        <h3 class="notification-title">${notification.title}</h3>
+                        <p class="notification-message">${notification.message}</p>
+                        <div class="notification-meta">
+                            <span>${notification.date}</span>
+                        </div>
+                        <div class="notification-actions">
+                            <button class="notification-btn" onclick="window.location.href='${notification.action.url}'">
+                                ${notification.action.text}
+                            </button>
+                            <button class="notification-btn mark-read" data-id="${notification.id}">
+                                ${notification.isUnread ? 'Mark as read' : 'Mark as unread'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                notificationList.appendChild(card);
+            });
+            
+            // Add event listeners to mark read/unread buttons
+            document.querySelectorAll('.mark-read').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const id = parseInt(this.dataset.id);
+                    toggleReadStatus(id);
+                });
+            });
+        }
+        
+        // Toggle read status of a notification
+        function toggleReadStatus(id) {
+            const notification = notifications.find(n => n.id === id);
+            if (notification) {
+                notification.isUnread = !notification.isUnread;
+                
+                // Re-render with the current filter
+                const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+                renderNotifications(activeFilter);
+            }
+        }
+        
+        // Mark all notifications as read
+        function markAllAsRead() {
+            notifications.forEach(notification => {
+                notification.isUnread = false;
+            });
+            
+            // Re-render with the current filter
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            renderNotifications(activeFilter);
+        }
+        
+        // Filter button click handler
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Apply filter
+                const filter = this.dataset.filter;
+                renderNotifications(filter);
+            });
+        });
+        
+        // Mark all as read button handler
+        markAllReadBtn.addEventListener('click', markAllAsRead);
+        
+        // Preferences modal handlers
+        preferencesBtn.addEventListener('click', function() {
+            preferencesModal.style.display = 'flex';
+        });
+        
+        closeModalBtn.addEventListener('click', function() {
+            preferencesModal.style.display = 'none';
+        });
+        
+        savePreferencesBtn.addEventListener('click', function() {
+            // Save preferences logic here
+            // This would normally make an API call
+            
+            // Display a success message or notification
+            alert('Notification preferences saved successfully!');
+            
+            // Close the modal
+            preferencesModal.style.display = 'none';
+        });
+        
+        // Close modal if clicked outside the content
+        window.addEventListener('click', function(event) {
+            if (event.target === preferencesModal) {
+                preferencesModal.style.display = 'none';
+            }
+        });
+        
+        // Initial render
+        renderNotifications();
+    </script>
+</body>
+</html>

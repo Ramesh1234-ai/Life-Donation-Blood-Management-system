@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipient Request - Blood Donation System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #e74c3c;
+            --primary-light: #f5b7b1;
+            --primary-dark: #c0392b;
+            --secondary: #3498db;
+            --dark: #333;
+            --light: #f8f9fa;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --danger: #e74c3c;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(to bottom, var(--primary-dark), var(--primary));
+            color: white;
+            transition: all 0.3s ease;
+            position: fixed;
+            height: 100vh;
+            z-index: 100;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .sidebar-logo i {
+            font-size: 24px;
+        }
+        
+        .nav-menu {
+            padding: 15px 0;
+        }
+        
+        .nav-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 3px solid white;
+        }
+        
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            transition: all 0.3s ease;
+        }
+        
+        .header {
+            background-color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 99;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .toggle-sidebar {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: var(--primary);
+            cursor: pointer;
+            display: none;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .notification-bell {
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .notification-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            font-size: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Page Content */
+        .page-content {
+            padding: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page-title {
+            margin-bottom: 20px;
+        }
+        
+        .page-title h1 {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .breadcrumb {
+            display: flex;
+            gap: 5px;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .breadcrumb a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .card-body {
+            padding: 20px;
+        }
+        
+        /* Form Styles */
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: -10px;
+        }
+        
+        .form-group {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .input-with-icon {
+            position: relative;
+        }
+        
+        .input-with-icon i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        .input-with-icon .form-control {
+            padding-left: 35px;
+        }
+        
+        /* Blood Type Selector */
+        .blood-type-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .blood-type-option {
+            position: relative;
+        }
+        
+        .blood-type-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+        
+        .blood-type-option label {
+            display: block;
+            width: 50px;
+            padding: 10px 0;
+            text-align: center;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .blood-type-option input[type="radio"]:checked + label {
+            border-color: var(--primary);
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--primary);
+        }
+        
+        /* Button Styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        /* Table Styles */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .table th, .table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+        
+        .table th {
+            font-weight: 500;
+            color: var(--gray);
+        }
+        
+        .table tbody tr {
+            transition: background-color 0.3s;
+        }
+        
+        .table tbody tr:hover {
+            background-color: rgba(0,0,0,0.02);
+        }
+        
+        /* Status Badge */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .badge-pending {
+            background-color: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+        
+        .badge-approved {
+            background-color: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-fulfilled {
+            background-color: rgba(52, 152, 219, 0.1);
+            color: var(--secondary);
+        }
+        
+        .badge-rejected {
+            background-color: rgba(231, 76, 60, 0.1);
+            color: var(--danger);
+        }
+        
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+        
+        .toast {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-radius: 4px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            margin-bottom: 10px;
+            animation: slideIn 0.3s forwards;
+            max-width: 350px;
+        }
+        
+        .toast-icon {
+            margin-right: 15px;
+            font-size: 20px;
+        }
+        
+        .toast-success .toast-icon {
+            color: var(--success);
+        }
+        
+        .toast-error .toast-icon {
+            color: var(--danger);
+        }
+        
+        .toast-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .toast-message {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .pulse {
+            animation: pulse 1.5s infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s forwards;
+        }
+        
+        .delay-1 {
+            animation-delay: 0.1s;
+        }
+        
+        .delay-2 {
+            animation-delay: 0.2s;
+        }
+        
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            transform: translateY(20px);
+            transition: all 0.3s;
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--gray);
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 991px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .sidebar-logo h3, .nav-item span {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+        }
+        
+        @media (max-width: 767px) {
+            .toggle-sidebar {
+                display: block;
+            }
+            
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+                width: 250px;
+            }
+            
+            .sidebar.active .sidebar-logo h3,
+            .sidebar.active .nav-item span {
+                display: block;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .form-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+    
+    <!-- Modal -->
+    <div class="modal-overlay" id="viewRequestModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Request Details</h3>
+                <button class="modal-close" id="closeModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalContent">
+                <!-- Content will be dynamically inserted -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <i class="fas fa-heartbeat pulse"></i>
+                    <h3>BloodConnect</h3>
+                </div>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="c.html" class="nav-item">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="D.html" class="nav-item">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Donor Registration</span>
+                </a>
+                <a href="e.html" class="nav-item active">
+                    <i class="fas fa-hand-holding-heart"></i>
+                    <span>Recipient Requests</span>
+                </a>
+                <a href="f.html" class="nav-item">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Matching Process</span>
+                </a>
+                <a href="c.html" class="nav-item">
+                    <i class="fas fa-warehouse"></i>
+                    <span>Blood Inventory</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-history"></i>
+                    <span>Donation History</span>
+                </a>
+                <a href="g.html" class="nav-item">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-left">
+                    <button class="toggle-sidebar" id="toggleSidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h2>Blood Donation Management</h2>
+                </div>
+                
+                <div class="header-right">
+                    <div class="notification-bell">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-count">3</span>
+                    </div>
+                    
+                    <div class="user-profile">
+                        <div class="user-avatar">JD</div>
+                        <span class="user-name">John Doe</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Page Content -->
+            <div class="page-content">
+                <!-- Page Title -->
+                <div class="page-title fade-in">
+                    <h1>Recipient Blood Requests</h1>
+                    <div class="breadcrumb">
+                        <a href="#">Dashboard</a>
+                        <i class="fas fa-chevron-right"></i>
+                        <span>Recipient Requests</span>
+                    </div>
+                </div>
+                
+                <!-- Request Form Card -->
+                <div class="card fade-in delay-1">
+                    <div class="card-header">
+                        <h3>New Blood Request</h3>
+                    </div>
+                    <div class="card-body">
+                        <form id="bloodRequestForm">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Patient Name</label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-user"></i>
+                                        <input type="text" class="form-control" id="patientName" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Hospital/Clinic</label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-hospital"></i>
+                                        <input type="text" class="form-control" id="hospital" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Contact Number</label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-phone"></i>
+                                        <input type="tel" class="form-control" id="contactNumber" required>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Required Date</label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-calendar"></i>
+                                        <input type="date" class="form-control" id="requiredDate" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Blood Type Required</label>
+                                    <div class="blood-type-selector">
+                                        <div class="blood-type-option">
+                                            <input type="radio" name="bloodType" id="typeAPos" value="A+">
+                                            <label for="typeAPos">A+</label>
+                                        </div>
+                                        <div class="blood-type-option">
+                                            <input type="radio" name="bloodType" id="typeANeg" value="A-">
+                                            <label for="typeANeg">A-</label>
+                                        </div>
+                                        <div class="blood-type-option">
+                                            <input type="radio" name="bloodType" id="typeBPos" value="B+">
+                                            <label for="typeBPos">B+</label>
+                                        </div>
+                                        <div class="blood-type-option">
+                                            <input type="radio" name="bloodType" id="typeBNeg" value="B-">
+                                            <label for="typeBNeg">B-</label>
+                                        </div>
+                                        <div class="blood-type-option">
+                                            <input type="radio" name="bloodType" id="typeABPos" value="AB+">
+                                            <label for="typeABPos">AB+</label>
+                                        </div>
+                                        <div class="blood-type-option">
+                                            <input type="radio" name="bloodType" id="typeABNeg" value="AB-">
+                                            <label for="typeABNeg">AB-</label>
+                                        </div>
+                                        <div class="blood-type-option">
+                                            <input type="radio" name="bloodType" id="typeOPos" value="O+">
+                                            <label for="typeOPos">O+</label>
+                                        </div>
+                                        <div class="blood-type-option">
+                                            <input type="radio" name="bloodType" id="typeONeg" value="O-">
+                                            <label for="typeONeg">O-</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label class="form-label">Units Required</label>
+                                    <div class="input-with-icon">
+                                        <i class="fas fa-tint"></i>
+                                        <input type="number" class="form-control" id="unitsRequired" min="1" value="1" required>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label class="form-label">Reason/Purpose</label>
+                                <textarea class="form-control" id="purpose" rows="3"></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-outline" id="resetBtn">Reset</button>
+                                <button type="submit" class="btn btn-primary" id="submitBtn">
+                                    <i class="fas fa-paper-plane"></i> Submit Request
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                
+                <!-- Requests List Card -->
+                <div class="card fade-in delay-2">
+                    <div class="card-header">
+                        <h3>Recent Blood Requests</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table" id="requestsTable">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Patient</th>
+                                        <th>Blood Type</th>
+                                        <th>Units</th>
+                                        <th>Required Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Table will be populated by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data for requests
+        let requests = [
+            {
+                id: 'REQ001',
+                patient: 'Sarah Johnson',
+                hospital: 'City Hospital',
+                contactNumber: '(555) 123-4567',
+                bloodType: 'A+',
+                units: 2,
+                requiredDate: '2025-03-10',
+                purpose: 'Surgery preparation',
+                status: 'Pending',
+                createdAt: '2025-02-25'
+            },
+            {
+                id: 'REQ002',
+                patient: 'Michael Brown',
+                hospital: 'Medical Center',
+                contactNumber: '(555) 987-6543',
+                bloodType: 'O-',
+                units: 3,
+                requiredDate: '2025-03-05',
+                purpose: 'Emergency transfusion',
+                status: 'Approved',
+                createdAt: '2025-02-24'
+            },
+            {
+                id: 'REQ003',
+                patient: 'Emily Wilson',
+                hospital: 'Community Hospital',
+                contactNumber: '(555) 456-7890',
+                bloodType: 'B+',
+                units: 1,
+                requiredDate: '2025-03-15',
+                purpose: 'Anemia treatment',
+                status: 'Fulfilled',
+                createdAt: '2025-02-20'
+            }
+        ];
+        
+        // DOM Elements
+        const sidebar = document.getElementById('sidebar');
+        const toggleSidebarBtn = document.getElementById('toggleSidebar');
+        const bloodRequestForm = document.getElementById('bloodRequestForm');
+        const resetBtn = document.getElementById('resetBtn');
+        const requestsTable = document.getElementById('requestsTable').querySelector('tbody');
+        const toastContainer = document.getElementById('toastContainer');
+        const viewRequestModal = document.getElementById('viewRequestModal');
+        const closeModalBtn = document.getElementById('closeModal');
+        const modalContent = document.getElementById('modalContent');
+        
+        // Toggle Sidebar
+        toggleSidebarBtn.addEventListener('click', () => {
+            sidebar.classList.toggle('active');
+        });
+        
+        // Close Modal
+        closeModalBtn.addEventListener('click', () => {
+            viewRequestModal.classList.remove('active');
+        });
+        
+        // Display Toast Notification
+        function showToast(type, title, message) {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            toastContainer.appendChild(toast);
+            
+            // Remove toast after 5 seconds
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }, 5000);
+        }
+        
+        // Populate Requests Table
+        function populateRequestsTable() {
+            requestsTable.innerHTML = '';
+            
+            requests.forEach(request => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${request.id}</td>
+                    <td>${request.patient}</td>
+                    <td>${request.bloodType}</td>
+                    <td>${request.units}</td>
+                    <td>${formatDate(request.requiredDate)}</td>
+                    <td><span class="badge badge-${getStatusClass(request.status)}">${request.status}</span></td>
+                    <td>
+                        <button class="btn btn-outline btn-sm view-btn" data-id="${request.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                `;
+                
+                requestsTable.appendChild(row);
+            });
+            
+            // Add event listeners to view buttons
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const requestId = this.getAttribute('data-id');
+                    viewRequestDetails(requestId);
+                });
+            });
+        }
+      </script>
+</body>
+</html>
+            

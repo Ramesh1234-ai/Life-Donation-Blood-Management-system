@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Matching System | LifeDrop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #f1faee;
+            --dark: #1d3557;
+            --light: #a8dadc;
+            --accent: #457b9d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            max-width: 1200px;
+            margin: 100px auto 50px;
+            padding: 0 20px;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title h1::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: -10px;
+            left: 25%;
+        }
+
+        .page-title p {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Matching System Specific Styles */
+        .matching-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .matching-form {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .matching-results {
+            flex: 2;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        .form-title {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.2);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: #d32f3d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(230, 57, 70, 0.3);
+        }
+
+        .blood-type-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .blood-type-btn {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .blood-type-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .blood-type-btn:hover:not(.active) {
+            background-color: #f0f0f0;
+        }
+
+        .result-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .result-table th, .result-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .result-table th {
+            background-color: var(--accent);
+            color: white;
+            font-weight: 500;
+        }
+
+        .result-table tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .badge-success {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .badge-warning {
+            background-color: #ffc107;
+            color: #212529;
+        }
+
+        .badge-danger {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .match-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .match-info-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-right: 15px;
+        }
+
+        .compatibility-info {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .compatibility-title {
+            font-size: 1.2rem;
+            color: var(--dark);
+            margin-bottom: 15px;
+        }
+
+        .compatibility-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .compatibility-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .compatibility-card-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark);
+        }
+
+        .compatibility-card ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .compatibility-card li {
+            padding: 3px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .compatibility-card li i {
+            color: #28a745;
+            margin-right: 5px;
+        }
+
+        .map-container {
+            height: 300px;
+            border-radius: 10px;
+            margin-top: 30px;
+            background-color: #eee;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #666;
+        }
+
+        .btn-block {
+            display: block;
+            width: 100%;
+        }
+
+        .action-btn {
+            padding: 8px 15px;
+            border-radius: 5px;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background-color: #3a6a8a;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 3rem 1rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+            bottom: -8px;
+            left: 0;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .contact-info i {
+            margin-right: 0.8rem;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: #444;
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid #444;
+            margin-top: 3rem;
+        }
+
+        /* Media Queries */
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+                transition: all 0.4s ease;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .matching-container {
+                flex-direction: column;
+            }
+            
+            .compatibility-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <i class="fas fa-tint"></i>
+                <span>LifeDrop</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="A.html">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="D.html">Donate</a></li>
+                <li><a href="e.html">Request</a></li>
+                <li><a href="f.html" class="active">Matching</a></li>
+                <li><a href="g.html">Notifications</a></li>
+                <li><a href="h.html">Contact</a></li>
+                <li><a href="B.html" class="btn login-btn">Login</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-title">
+            <h1>Intelligent Blood Matching System</h1>
+            <p>Our advanced matching system connects donors with compatible recipients efficiently, ensuring timely and compatible blood donations to those in need.</p>
+        </div>
+
+        <div class="matching-container">
+            <div class="matching-form">
+                <h3 class="form-title">Find Compatible Match</h3>
+                <div class="match-info">
+                    <div class="match-info-icon">
+                        <i class="fas fa-exchange-alt"></i>
+                    </div>
+                    <div>
+                        <h4>Compatible matching saves lives</h4>
+                        <p>Our system automatically finds the best matches based on blood type and location.</p>
+                    </div>
+                </div>
+
+                <form id="matching-form">
+                    <div class="form-group">
+                        <label for="match-type">I am a:</label>
+                        <select id="match-type" class="form-control">
+                            <option value="donor">Donor looking for recipients</option>
+                            <option value="recipient">Recipient looking for donors</option>
+                            <option value="hospital">Hospital/Blood Bank</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="blood-type">Blood Type:</label>
+                        <div class="blood-type-container">
+                            <button type="button" class="blood-type-btn" data-type="A+">A+</button>
+                            <button type="button" class="blood-type-btn" data-type="A-">A-</button>
+                            <button type="button" class="blood-type-btn" data-type="B+">B+</button>
+                            <button type="button" class="blood-type-btn" data-type="B-">B-</button>
+                            <button type="button" class="blood-type-btn" data-type="AB+">AB+</button>
+                            <button type="button" class="blood-type-btn" data-type="AB-">AB-</button>
+                            <button type="button" class="blood-type-btn" data-type="O+">O+</button>
+                            <button type="button" class="blood-type-btn" data-type="O-">O-</button>
+                        </div>
+                        <input type="hidden" id="selected-blood-type" name="blood-type" value="">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location:</label>
+                        <input type="text" id="location" class="form-control" placeholder="Enter your city or zip code">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="distance">Maximum Distance:</label>
+                        <select id="distance" class="form-control">
+                            <option value="5">5 miles</option>
+                            <option value="10">10 miles</option>
+                            <option value="25" selected>25 miles</option>
+                            <option value="50">50 miles</option>
+                            <option value="100">100 miles</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="urgency">Urgency:</label>
+                        <select id="urgency" class="form-control">
+                            <option value="routine">Routine</option>
+                            <option value="soon">Needed Soon</option>
+                            <option value="urgent">Urgent</option>
+                            <option value="emergency">Emergency</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="find-matches" class="btn btn-primary btn-block">Find Matches</button>
+                </form>
+            </div>
+
+            <div class="matching-results">
+                <h3 class="form-title">Compatible Matches</h3>
+                <div id="results-container">
+                    <p class="text-center">Enter your details to find potential matches.</p>
+                    <div class="map-container">
+                        <p>Map showing nearby donation centers will appear here</p>
+                    </div>
+                </div>
+
+                <div id="results-table-container" style="display: none;">
+                    <table class="result-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>Blood Type</th>
+                                <th>Distance</th>
+                                <th>Compatibility</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="results-table-body">
+                            <!-- Results will be populated here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="compatibility-info">
+                    <h4 class="compatibility-title">Blood Type Compatibility Chart</h4>
+                    <div class="compatibility-grid">
+                        <div class="compatibility-card">
+                            <div class="compatibility-card-title">A+ can receive from:</div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> A+</li>
+                                <li><i class="fas fa-check"></i> A-</li>
+                                <li><i class="fas fa-check"></i> O+</li>
+                                <li><i class="fas fa-check"></i> O-</li>
+                            </ul>
+                        </div>
+                        <div class="compatibility-card">
+                            <div class="compatibility-card-title">A- can receive from:</div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> A-</li>
+                                <li><i class="fas fa-check"></i> O-</li>
+                            </ul>
+                        </div>
+                        <div class="compatibility-card">
+                            <div class="compatibility-card-title">B+ can receive from:</div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> B+</li>
+                                <li><i class="fas fa-check"></i> B-</li>
+                                <li><i class="fas fa-check"></i> O+</li>
+                                <li><i class="fas fa-check"></i> O-</li>
+                            </ul>
+                        </div>
+                        <div class="compatibility-card">
+                            <div class="compatibility-card-title">B- can receive from:</div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> B-</li>
+                                <li><i class="fas fa-check"></i> O-</li>
+                            </ul>
+                        </div>
+                        <div class="compatibility-card">
+                            <div class="compatibility-card-title">AB+ can receive from:</div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> All blood types</li>
+                            </ul>
+                        </div>
+                        <div class="compatibility-card">
+                            <div class="compatibility-card-title">AB- can receive from:</div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> AB-</li>
+                                <li><i class="fas fa-check"></i> A-</li>
+                                <li><i class="fas fa-check"></i> B-</li>
+                                <li><i class="fas fa-check"></i> O-</li>
+                            </ul>
+                        </div>
+                        <div class="compatibility-card">
+                            <div class="compatibility-card-title">O+ can receive from:</div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> O+</li>
+                                <li><i class="fas fa-check"></i> O-</li>
+                            </ul>
+                        </div>
+                        <div class="compatibility-card">
+                            <div class="compatibility-card-title">O- can receive from:</div>
+                            <ul>
+                                <li><i class="fas fa-check"></i> O- only</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>LifeDrop</h3>
+                <p>A modern blood donation management system dedicated to saving lives through efficient donor-recipient matching.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="D.html">Donate Blood</a></li>
+                    <li><a href="e.html">Request Blood</a></li>
+                    <li><a href="matching.html">Matching System</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul class="contact-info">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Health Avenue, Medical District, City</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone"></i>
+                        <span>+1 234 567 8900</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span>info@lifedrop.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 LifeDrop - Blood Donation Management System. All Rights Reserved.</p>
+        </div>
+    </footer>
+<script>
+    // Mobile Menu Toggle
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navLinks = document.querySelector('.nav-links');
+
+mobileMenuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    mobileMenuBtn.querySelector('i').classList.toggle('fa-bars');
+    mobileMenuBtn.querySelector('i').classList.toggle('fa-times');
+});
+
+// Blood Type Selection
+const bloodTypeButtons = document.querySelectorAll('.blood-type-btn');
+const selectedBloodTypeInput = document.getElementById('selected-blood-type');
+
+bloodTypeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        bloodTypeButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        selectedBloodTypeInput.value = button.dataset.type;
+    });
+});
+
+// Find Matches Button Click
+const findMatchesBtn = document.getElementById('find-matches');
+const resultsContainer = document.getElementById('results-container');
+const resultsTableContainer = document.getElementById('results-table-container');
+const resultsTableBody = document.getElementById('results-table-body');
+
+findMatchesBtn.addEventListener('click', () => {
+    // Get form values
+    const matchType = document.getElementById('match-type').value;
+    const bloodType = selectedBloodTypeInput.value;
+    const location = document.getElementById('location').value;
+    const distance = document.getElementById('distance').value;
+    const urgency = document.getElementById('urgency').value;
+    
+    // Validate form
+    if (!bloodType) {
+        alert('Please select a blood type');
+        return;
+    }
+    
+    if (!location) {
+        alert('Please enter your location');
+        return;
+    }
+    
+    // Show loading state
+    resultsContainer.innerHTML = '<div class="text-center"><i class="fas fa-spinner fa-spin"></i> Finding matches...</div>';
+    
+    // Simulate API call with setTimeout (replace with actual API call in production)
+    setTimeout(() => {
+        // Generate sample results based on selections
+        generateSampleResults(matchType, bloodType, location, distance, urgency);
+        
+        // Hide initial results container and show table
+        resultsContainer.style.display = 'none';
+        resultsTableContainer.style.display = 'block';
+    }, 1500);
+});
+
+// Function to generate sample results (replace with actual API data in production)
+function generateSampleResults(matchType, bloodType, location, distance, urgency) {
+    resultsTableBody.innerHTML = '';
+    
+    // Sample data - in a real app, this would come from your API
+    const sampleData = [
+        {
+            name: 'John Smith',
+            type: matchType === 'donor' ? 'Recipient' : 'Donor',
+            bloodType: getCompatibleBloodType(bloodType, matchType),
+            distance: Math.floor(Math.random() * parseInt(distance)) + 1,
+            compatibility: 'High'
+        },
+        {
+            name: 'City Medical Center',
+            type: 'Hospital',
+            bloodType: getCompatibleBloodType(bloodType, matchType),
+            distance: Math.floor(Math.random() * parseInt(distance)) + 1,
+            compatibility: 'Medium'
+        },
+        {
+            name: 'Regional Blood Bank',
+            type: 'Blood Bank',
+            bloodType: getCompatibleBloodType(bloodType, matchType),
+            distance: Math.floor(Math.random() * parseInt(distance)) + 1,
+            compatibility: 'High'
+        },
+        {
+            name: 'Jane Doe',
+            type: matchType === 'donor' ? 'Recipient' : 'Donor',
+            bloodType: getCompatibleBloodType(bloodType, matchType),
+            distance: Math.floor(Math.random() * parseInt(distance)) + 1,
+            compatibility: 'Low'
+        },
+        {
+            name: 'Community Hospital',
+            type: 'Hospital',
+            bloodType: getCompatibleBloodType(bloodType, matchType),
+            distance: Math.floor(Math.random() * parseInt(distance)) + 2,
+            compatibility: 'Medium'
+        }
+    ];
+    
+    // Sort by distance and compatibility
+    sampleData.sort((a, b) => {
+        if (a.compatibility === 'High' && b.compatibility !== 'High') return -1;
+        if (a.compatibility !== 'High' && b.compatibility === 'High') return 1;
+        return a.distance - b.distance;
+    });
+    
+    // Add rows to table
+    sampleData.forEach(result => {
+        const row = document.createElement('tr');
+        
+        const compatibilityBadge = getCompatibilityBadge(result.compatibility);
+        
+        row.innerHTML = `
+            <td>${result.name}</td>
+            <td>${result.type}</td>
+            <td>${result.bloodType}</td>
+            <td>${result.distance} miles</td>
+            <td>${compatibilityBadge}</td>
+            <td><button class="action-btn">Contact</button></td>
+        `;
+        
+        resultsTableBody.appendChild(row);
+    });
+
+    // Setup contact buttons
+    setupContactButtons();
+    
+    // Show map with locations (placeholder in this demo)
+    resultsContainer.style.display = 'block';
+    resultsContainer.innerHTML = `
+        <div class="map-container">
+            <div style="text-align: center;">
+                <h4>Nearby ${matchType === 'donor' ? 'Recipients' : 'Donors'}</h4>
+                <p>Interactive map showing matches within ${distance} miles of ${location}</p>
+                <i class="fas fa-map-marked-alt" style="font-size: 3rem; color: var(--accent); margin: 20px 0;"></i>
+            </div>
+        </div>
+    `;
+}
+
+// Get compatibility badge based on compatibility level
+function getCompatibilityBadge(compatibility) {
+    switch(compatibility) {
+        case 'High':
+            return '<span class="badge badge-success">High Match</span>';
+        case 'Medium':
+            return '<span class="badge badge-warning">Medium Match</span>';
+        case 'Low':
+            return '<span class="badge badge-danger">Low Match</span>';
+        default:
+            return '<span class="badge">Unknown</span>';
+    }
+}
+
+// Get a compatible blood type based on the selected type and match type
+function getCompatibleBloodType(bloodType, matchType) {
+    // Blood compatibility logic
+    const compatibility = {
+        'A+': { receive: ['A+', 'A-', 'O+', 'O-'], donate: ['A+', 'AB+'] },
+        'A-': { receive: ['A-', 'O-'], donate: ['A+', 'A-', 'AB+', 'AB-'] },
+        'B+': { receive: ['B+', 'B-', 'O+', 'O-'], donate: ['B+', 'AB+'] },
+        'B-': { receive: ['B-', 'O-'], donate: ['B+', 'B-', 'AB+', 'AB-'] },
+        'AB+': { receive: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'], donate: ['AB+'] },
+        'AB-': { receive: ['A-', 'B-', 'AB-', 'O-'], donate: ['AB+', 'AB-'] },
+        'O+': { receive: ['O+', 'O-'], donate: ['A+', 'B+', 'AB+', 'O+'] },
+        'O-': { receive: ['O-'], donate: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'] }
+    };
+    
+    let compatibleTypes;
+    
+    // If donor looking for recipients, show who they can donate to
+    // If recipient looking for donors, show who can donate to them
+    if (matchType === 'donor') {
+        compatibleTypes = compatibility[bloodType].donate;
+    } else {
+        compatibleTypes = compatibility[bloodType].receive;
+    }
+    
+    // Return a random compatible blood type
+    return compatibleTypes[Math.floor(Math.random() * compatibleTypes.length)];
+}
+
+// Setup contact buttons
+function setupContactButtons() {
+    const contactButtons = document.querySelectorAll('.action-btn');
+    
+    contactButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const row = e.target.closest('tr');
+            const name = row.cells[0].textContent;
+            const type = row.cells[1].textContent;
+            
+            // Show modal or alert with contact options
+            alert(`You're about to contact ${name} (${type}). In a full implementation, this would open a contact form or messaging system.`);
+        });
+    });
+}
+
+// Form input enhancements
+document.getElementById('location').addEventListener('input', function() {
+    // In a real implementation, this could trigger location autocomplete suggestions
+    console.log('Location input: ' + this.value);
+});
+
+document.getElementById('match-type').addEventListener('change', function() {
+    const matchTypeLabel = document.querySelector('label[for="match-type"]');
+    const findButton = document.getElementById('find-matches');
+    
+    if (this.value === 'donor') {
+        matchTypeLabel.textContent = 'I am a Donor looking for:';
+        findButton.textContent = 'Find Recipients';
+    } else if (this.value === 'recipient') {
+        matchTypeLabel.textContent = 'I am a Recipient looking for:';
+        findButton.textContent = 'Find Donors';
+    } else {
+        matchTypeLabel.textContent = 'I am a:';
+        findButton.textContent = 'Find Matches';
+    }
+});
+
+document.getElementById('urgency').addEventListener('change', function() {
+    // Change button appearance based on urgency
+    const findButton = document.getElementById('find-matches');
+    
+    if (this.value === 'emergency') {
+        findButton.style.backgroundColor = '#dc3545';
+        findButton.style.fontWeight = 'bold';
+    } else if (this.value === 'urgent') {
+        findButton.style.backgroundColor = '#fd7e14';
+        findButton.style.fontWeight = 'bold';
+    } else {
+        findButton.style.backgroundColor = '';
+        findButton.style.fontWeight = '';
+    }
+});
+
+// Initialize blood type selection - default to O+
+document.querySelector('.blood-type-btn[data-type="O+"]').click();
+
+// Initialize page load animation
+document.addEventListener('DOMContentLoaded', function() {
+    const pageTitle = document.querySelector('.page-title h1');
+    const pageDesc = document.querySelector('.page-title p');
+    
+    pageTitle.classList.add('animate__animated', 'animate__fadeInDown');
+    pageDesc.classList.add('animate__animated', 'animate__fadeIn');
+    pageDesc.style.animationDelay = '0.5s';
+});
+</script>
+</body>
+</html>

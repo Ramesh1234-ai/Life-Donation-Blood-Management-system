@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Blood Donation Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        /* Add the same CSS styles as in login.html */
+    </style>
+</head>
+<body>
+    <a href="A.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+    
+    <div class="login-container">
+        <div class="login-image">
+            <div id="blood-drops-container"></div>
+            <div class="image-content">
+                <h2>Welcome to LifeDrop</h2>
+                <p>Your contribution can save lives. Register to donate blood or request for blood and be part of our life-saving community.</p>
+                <img src="/api/placeholder/150/150" alt="Blood Donation Logo" style="filter: brightness(0) invert(1); width: 150px;">
+            </div>
+        </div>
+        
+        <div class="login-form">
+            <div class="login-header">
+                <h2>Register</h2>
+                <p>Create a new account</p>
+            </div>
+            
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="full_name">Full Name</label>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="full_name" class="form-control" placeholder="Enter your full name" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="user_type">User Type</label>
+                    <div class="input-group">
+                        <i class="fas fa-users"></i>
+                        <select id="user_type" class="form-control" required>
+                            <option value="donor">Donor</option>
+                            <option value="recipient">Recipient</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+            
+            <div class="register-link">
+                Already have an account? <a href="login.html">Login now</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const registerForm = document.getElementById('registerForm');
+
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const full_name = document.getElementById('full_name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const user_type = document.getElementById('user_type').value;
+
+            const registerBtn = document.querySelector('.btn-primary');
+            registerBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+            registerBtn.disabled = true;
+
+            try {
+                const response = await fetch('http://localhost:5000/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ full_name, email, password, user_type }),
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert('Registration successful!');
+                    window.location.href = 'login.html'; // Redirect to login page
+                } else {
+                    throw new Error(data.message || 'Registration failed');
+                }
+            } catch (error) {
+                alert(error.message);
+            } finally {
+                registerBtn.innerHTML = 'Register';
+                registerBtn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>

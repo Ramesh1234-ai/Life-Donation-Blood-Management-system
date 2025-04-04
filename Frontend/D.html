@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Registration - Blood Donation Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #457b9d;
+            --light-color: #f1faee;
+            --dark-color: #1d3557;
+            --success-color: #2a9d8f;
+            --warning-color: #e9c46a;
+            --danger-color: #e76f51;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-header h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-header p {
+            opacity: 0.8;
+            position: relative;
+            z-index: 1;
+        }
+
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            width: 140px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark-color);
+            transition: color 0.3s ease;
+        }
+
+        .form-group:focus-within label {
+            color: var(--primary-color);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5ee;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.2);
+            outline: none;
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper::after {
+            content: '\f107';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .btn {
+            display: inline-block;
+            background: var(--primary-color);
+            color: white;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            background: #d62839;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(230, 57, 70, 0.3);
+        }
+
+        .form-success {
+            display: none;
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .blood-icon {
+            position: relative;
+            display: inline-block;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .divider {
+            position: relative;
+            height: 2px;
+            background: #e1e5ee;
+            margin: 30px 0;
+        }
+
+        .divider::before {
+            content: 'Important Information';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 0 15px;
+            font-size: 14px;
+            color: var(--secondary-color);
+        }
+
+        .requirements {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .requirements h3 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .requirements ul {
+            list-style-type: none;
+        }
+
+        .requirements li {
+            margin-bottom: 10px;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .requirements li::before {
+            content: '\f058';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--success-color);
+            position: absolute;
+            left: 0;
+        }
+
+        /* Animations */
+        .animate-in {
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .card-body {
+                padding: 20px;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="card animate-in" style="animation-delay: 0.1s;">
+            <div class="card-header">
+                <h2><i class="fas fa-heart blood-icon"></i> Donor Registration</h2>
+                <p>Join our lifesaving community by registering as a blood donor today</p>
+            </div>
+            <div class="card-body">
+                <div class="form-success" id="successMessage">
+                    <i class="fas fa-check-circle"></i> Thank you for registering as a donor! Your information has been saved successfully.
+                </div>
+                
+                <form id="donorForm">
+                    <div class="form-group animate-in" style="animation-delay: 0.2s;">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" class="form-control" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="row" style="display: flex; gap: 20px;">
+                        <div class="form-group animate-in" style="flex: 1; animation-delay: 0.3s;">
+                            <label for="age">Age</label>
+                            <input type="number" class="form-control" id="age" min="18" max="65" placeholder="Your age" required>
+                        </div>
+                        
+                        <div class="form-group animate-in" style="flex: 1; animation-delay: 0.4s;">
+                            <label for="gender">Gender</label>
+                            <div class="select-wrapper">
+                                <select class="form-control" id="gender" required>
+                                    <option value="" selected disabled>Select gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row" style="display: flex; gap: 20px;">
+                        <div class="form-group animate-in" style="flex: 1; animation-delay: 0.5s;">
+                            <label for="bloodGroup">Blood Group</label>
+                            <div class="select-wrapper">
+                                <select class="form-control" id="bloodGroup" required>
+                                    <option value="" selected disabled>Select blood group</option>
+                                    <option value="A+">A+</option>
+                                    <option value="A-">A-</option>
+                                    <option value="B+">B+</option>
+                                    <option value="B-">B-</option>
+                                    <option value="AB+">AB+</option>
+                                    <option value="AB-">AB-</option>
+                                    <option value="O+">O+</option>
+                                    <option value="O-">O-</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group animate-in" style="flex: 1; animation-delay: 0.6s;">
+                            <label for="weight">Weight (kg)</label>
+                            <input type="number" class="form-control" id="weight" min="45" placeholder="Your weight in kilograms" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group animate-in" style="animation-delay: 0.7s;">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="Enter your phone number" required>
+                    </div>
+                    
+                    <div class="form-group animate-in" style="animation-delay: 0.8s;">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email address" required>
+                    </div>
+                    
+                    <div class="form-group animate-in" style="animation-delay: 0.9s;">
+                        <label for="address">Address</label>
+                        <textarea class="form-control" id="address" rows="3" placeholder="Enter your full address" required></textarea>
+                    </div>
+                    
+                    <div class="form-group animate-in" style="animation-delay: 1s;">
+                        <label for="lastDonation">Last Donation Date (if applicable)</label>
+                        <input type="date" class="form-control" id="lastDonation">
+                    </div>
+                    
+                    <div class="form-group animate-in" style="animation-delay: 1.1s;">
+                        <label>
+                            <input type="checkbox" id="healthDeclaration" required>
+                            I declare that I am in good health and eligible to donate blood
+                        </label>
+                    </div>
+                    
+                    <div class="form-group animate-in" style="animation-delay: 1.2s; text-align: center;">
+                        <button type="submit" class="btn" id="submitBtn">Register as Donor</button>
+                    </div>
+                </form>
+                
+                <div class="divider animate-in" style="animation-delay: 1.3s;"></div>
+                
+                <div class="requirements animate-in" style="animation-delay: 1.4s;">
+                    <h3>Donor Eligibility Requirements</h3>
+                    <ul>
+                        <li>You must be between 18-65 years of age</li>
+                        <li>You must weigh at least 45 kg</li>
+                        <li>Your hemoglobin level must be at least 12.5 g/dL</li>
+                        <li>You must be in good health at the time of donation</li>
+                        <li>You must not have donated blood in the last 3 months</li>
+                        <li>You must not have any chronic illnesses like HIV, Hepatitis B or C</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate elements sequentially on page load
+            const animatedElements = document.querySelectorAll('.animate-in');
+            animatedElements.forEach(element => {
+                setTimeout(() => {
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, 100);
+            });
+            
+            // Form submission handler
+            const donorForm = document.getElementById('donorForm');
+            const successMessage = document.getElementById('successMessage');
+            
+            donorForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Validate form
+                if (validateForm()) {
+                    // Simulate API call with loading state
+                    const submitBtn = document.getElementById('submitBtn');
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                    submitBtn.disabled = true;
+                    
+                    setTimeout(() => {
+                        // Store donor data
+                        const donorData = {
+                            fullName: document.getElementById('fullName').value,
+                            age: document.getElementById('age').value,
+                            gender: document.getElementById('gender').value,
+                            bloodGroup: document.getElementById('bloodGroup').value,
+                            weight: document.getElementById('weight').value,
+                            phone: document.getElementById('phone').value,
+                            email: document.getElementById('email').value,
+                            address: document.getElementById('address').value,
+                            lastDonation: document.getElementById('lastDonation').value,
+                            registrationDate: new Date().toISOString()
+                        };
+                        
+                        // In a real application, you would send this data to a server
+                        console.log('Donor data:', donorData);
+                        localStorage.setItem('donorData', JSON.stringify(donorData));
+                        
+                        // Show success message
+                        successMessage.style.display = 'block';
+                        donorForm.reset();
+                        
+                        // Scroll to success message
+                        successMessage.scrollIntoView({ behavior: 'smooth' });
+                        
+                        // Reset button
+                        submitBtn.innerHTML = 'Register as Donor';
+                        submitBtn.disabled = false;
+                        
+                        // Hide success message after 5 seconds
+                        setTimeout(() => {
+                            successMessage.style.display = 'none';
+                        }, 5000);
+                    }, 1500);
+                }
+            });
+            
+            function validateForm() {
+                // Basic validation
+                const age = document.getElementById('age').value;
+                const weight = document.getElementById('weight').value;
+                
+                if (age < 18 || age > 65) {
+                    alert('You must be between 18 and 65 years old to donate blood.');
+                    return false;
+                }
+                
+                if (weight < 45) {
+                    alert('You must weigh at least 45 kg to donate blood.');
+                    return false;
+                }
+                
+                return true;
+            }
+        });
+    </script>
+</body>
+</html>

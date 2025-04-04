@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Blood Donation Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #f1faee;
+            --dark: #1d3557;
+            --light: #a8dadc;
+            --accent: #457b9d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+        }
+        
+        .login-container {
+            display: flex;
+            max-width: 900px;
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+            animation: slideIn 0.6s ease forwards;
+        }
+        
+        .login-image {
+            flex: 1;
+            background: url('/api/placeholder/500/800') center/cover no-repeat;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: white;
+            text-align: center;
+        }
+        
+        .login-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(29, 53, 87, 0.7);
+        }
+        
+        .image-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .image-content h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .image-content p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2rem;
+        }
+        
+        .login-form {
+            flex: 1;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h2 {
+            font-size: 2rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: #6c757d;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+        }
+        
+        .forgot-password {
+            text-align: right;
+            margin-bottom: 1.5rem;
+        }
+        
+        .forgot-password a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        
+        .btn {
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            text-align: center;
+            display: block;
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background-color: #d32f3d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(230, 57, 70, 0.3);
+        }
+        
+        .login-options {
+            display: flex;
+            margin: 1.5rem 0;
+            position: relative;
+            font-weight: 500;
+            color: #6c757d;
+        }
+        
+        .login-options::before,
+        .login-options::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: #ced4da;
+            margin: auto 0.5rem;
+        }
+        
+        .social-login {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .social-btn {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #ced4da;
+            background-color: white;
+            color: #333;
+        }
+        
+        .social-btn:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .social-btn i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .social-btn.facebook i {
+            color: #3b5998;
+        }
+        
+        .social-btn.google i {
+            color: #db4437;
+        }
+        
+        .register-link {
+            text-align: center;
+            font-weight: 500;
+            color: #6c757d;
+        }
+        
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .back-home i {
+            margin-right: 5px;
+        }
+        
+        .back-home:hover {
+            transform: translateX(-5px);
+        }
+        
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .form-control.animated {
+            animation: inputFocus 0.3s ease forwards;
+        }
+        
+        @keyframes inputFocus {
+            0% {
+                border-color: #ced4da;
+                box-shadow: none;
+            }
+            100% {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+            }
+        }
+        
+        /* Blood Drop Animation */
+        .blood-drop {
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            background-color: rgba(230, 57, 70, 0.7);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            animation: drip 8s infinite linear;
+            opacity: 0;
+            z-index: 1;
+        }
+        
+        @keyframes drip {
+            0% {
+                transform: rotate(-45deg) translateY(-50px);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: rotate(-45deg) translateY(150px);
+                opacity: 0;
+            }
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                max-width: 90%;
+            }
+            
+            .login-image {
+                display: none;
+            }
+            
+            .login-form {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="A.html" class="back-home">
+        <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+    
+    <div class="login-container">
+        <div class="login-image">
+            <div id="blood-drops-container"></div>
+            <div class="image-content">
+                <h2>Welcome to LifeDrop</h2>
+                <p>Your contribution can save lives. Login to donate blood or request for blood and be part of our life-saving community.</p>
+                <img src="/api/placeholder/150/150" alt="Blood Donation Logo" style="filter: brightness(0) invert(1); width: 150px;">
+            </div>
+        </div>
+        
+        <div class="login-form">
+            <div class="login-header">
+                <h2>Login</h2>
+                <p>Access your account</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email address</label>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <div class="input-group">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                </div>
+                
+                <div class="forgot-password">
+                    <a href="#">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            
+            <div class="login-options">Or login with</div>
+            
+            <div class="social-login">
+                <button class="social-btn facebook">
+                    <i class="fab fa-facebook-f"></i> Facebook
+                </button>
+                <button class="social-btn google">
+                    <i class="fab fa-google"></i> Google
+                </button>
+            </div>
+            
+            <div class="register-link">
+                Don't have an account? <a href="register.html">Register now</a>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+// Enhanced login form script
+const loginForm = document.getElementById('loginForm');
+const emailInput = document.getElementById('email');
+const passwordInput = document.getElementById('password');
+const loginBtn = document.querySelector('.btn-primary');
+const errorElement = document.createElement('div');
+
+// Add error element to form
+errorElement.className = 'error-message';
+errorElement.style.color = 'var(--primary)';
+errorElement.style.marginTop = '10px';
+errorElement.style.display = 'none';
+loginBtn.after(errorElement);
+
+// Form validation function
+function validateForm() {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    
+    if (!email) {
+        showError('Email is required');
+        return false;
+    }
+    
+    if (!isValidEmail(email)) {
+        showError('Please enter a valid email address');
+        return false;
+    }
+    
+    if (!password) {
+        showError('Password is required');
+        return false;
+    }
+    
+    hideError();
+    return true;
+}
+
+// Email validation helper
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+// Show error message
+function showError(message) {
+    errorElement.textContent = message;
+    errorElement.style.display = 'block';
+}
+
+// Hide error message
+function hideError() {
+    errorElement.style.display = 'none';
+}
+
+// Handle form submission
+loginForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    // Validate form
+    if (!validateForm()) {
+        return;
+    }
+    
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    
+    // Update button state
+    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+    loginBtn.disabled = true;
+    
+    try {
+        // Send request to backend
+        const response = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+        });
+        
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.message || 'Authentication failed');
+        }
+        
+        if (data.token) {
+            // Store token in localStorage for future authenticated requests
+            localStorage.setItem('authToken', data.token);
+            
+            // Store user data if needed
+            if (data.user) {
+                localStorage.setItem('userData', JSON.stringify(data.user));
+            }
+            
+            // Add a redirect delay to show success
+            showSuccess('Login successful! Redirecting...');
+            
+            // Redirect to dashboard
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
+        } else {
+            throw new Error('Login failed: No authentication token received');
+        }
+    } catch (error) {
+        console.error('Login error:', error);
+        showError(error.message || 'Login failed. Please try again.');
+    } finally {
+        // Reset button state
+        loginBtn.innerHTML = 'Login';
+        loginBtn.disabled = false;
+    }
+});
+
+// Show success message
+function showSuccess(message) {
+    errorElement.textContent = message;
+    errorElement.style.color = '#28a745';
+    errorElement.style.display = 'block';
+}
+
+// Add input event listeners to clear error when user types
+emailInput.addEventListener('input', hideError);
+passwordInput.addEventListener('input', hideError);
+
+// Add animation to form fields when focused
+const formControls = document.querySelectorAll('.form-control');
+formControls.forEach(input => {
+    input.addEventListener('focus', () => {
+        input.classList.add('animated');
+    });
+    
+    input.addEventListener('blur', () => {
+        input.classList.remove('animated');
+    });
+});
+         </script>
+</body>
+</html>
