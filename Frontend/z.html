@@ -1,0 +1,619 @@
+<!-- This is a simple HTML template for the Blood Heroes Rewards page. It includes a header, tab navigation, rewards section, and FAQ section. The styles are written in CSS and the functionality is handled with JavaScript. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Heroes Rewards</title>
+    <style>
+        /* Reset and base styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: #f9fafb;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+        
+        /* Layout */
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 16px;
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .back-button {
+            margin-right: 16px;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .page-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        /* Tab Navigation */
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            background-color: white;
+        }
+        
+        .tab-button {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            background: none;
+            border: none;
+            color: #4b5563;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            color: #dc2626;
+            border-bottom: 2px solid #dc2626;
+            font-weight: 500;
+        }
+        
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            padding: 16px;
+        }
+        
+        /* Rewards Section */
+        .rewards-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .rewards-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+        
+        .rewards-subtitle {
+            color: #4b5563;
+        }
+        
+        .rewards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 16px;
+        }
+        
+        .card-title {
+            color: #4b5563;
+            margin-bottom: 16px;
+        }
+        
+        .points-circle-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        
+        .points-circle {
+            position: relative;
+            width: 128px;
+            height: 128px;
+        }
+        
+        .points-text {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .points-value {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .points-label {
+            font-size: 0.75rem;
+            color: #6b7280;
+        }
+        
+        .button {
+            width: 100%;
+            padding: 12px 0;
+            border-radius: 8px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .button-primary {
+            background-color: #dc2626;
+            color: white;
+        }
+        
+        .button-disabled {
+            background-color: #9ca3af;
+            color: white;
+            cursor: not-allowed;
+        }
+        
+        .reward-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 9999px;
+            object-fit: cover;
+        }
+        
+        .rewards-count {
+            font-size: 1.875rem;
+            font-weight: 700;
+        }
+        
+        .reward-label {
+            display: block;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        
+        .history-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 16px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .history-text span {
+            font-weight: 500;
+        }
+        
+        .history-button {
+            color: #2563eb;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+        
+        .info-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 16px;
+            display: flex;
+            margin-bottom: 12px;
+        }
+        
+        .info-icon {
+            margin-right: 16px;
+        }
+        
+        .icon-container {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .blue-bg {
+            background-color: #dbeafe;
+        }
+        
+        .red-bg {
+            background-color: #fee2e2;
+        }
+        
+        .info-icon img {
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px;
+        }
+        
+        .info-title {
+            font-weight: 600;
+        }
+        
+        .info-text {
+            color: #4b5563;
+            font-size: 0.875rem;
+        }
+        
+        .info-note {
+            color: #6b7280;
+            font-size: 0.75rem;
+            margin-top: 4px;
+        }
+        
+        /* FAQ Section */
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .faq-item {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            width: 100%;
+            padding: 12px 16px;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .question-text {
+            font-weight: 500;
+            color: #1f2937;
+        }
+        
+        .faq-answer {
+            padding: 12px 16px;
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .answer-text {
+            color: #4b5563;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-content">
+                <button class="back-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m15 18-6-6 6-6"/>
+                    </svg>
+                </button>
+                <h1 class="page-title" id="page-title">Life Drop Rewards</h1>
+            </div>
+        </header>
+
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <button class="tab-button active" id="rewards-tab">Rewards</button>
+            <button class="tab-button" id="faq-tab">FAQ</button>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-area">
+            <!-- Rewards Section -->
+            <div id="rewards-content">
+                <div class="rewards-header">
+                    <h2 class="rewards-title">Your Blood Heroes Rewards</h2>
+                    <p class="rewards-subtitle">Collect Credits to get Free Health Rewards!</p>
+                </div>
+
+                <div class="rewards-grid">
+                    <!-- Points Card -->
+                    <div class="card">
+                        <h3 class="card-title">Your Credits</h3>
+                        <div class="points-circle-container">
+                            <div class="points-circle">
+                                <svg width="128" height="128" viewBox="0 0 100 100">
+                                    <circle 
+                                        cx="50" cy="50" r="45" 
+                                        fill="none" 
+                                        stroke="#e6f0fd" 
+                                        stroke-width="10"
+                                    />
+                                    <circle 
+                                        cx="50" cy="50" r="45" 
+                                        fill="none" 
+                                        stroke="#e91e63" 
+                                        stroke-width="10"
+                                        stroke-dasharray="282.7"
+                                        stroke-dashoffset="169.62" 
+                                        stroke-linecap="round"
+                                        transform="rotate(-90 50 50)"
+                                    />
+                                </svg>
+                                <div class="points-text">
+                                    <span class="points-value">0/500</span>
+                                    <span class="points-label">credits</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="button button-primary"><a href="y.html">
+                            Donate & Get credits
+                            </a>
+                        </button>
+                        </div>
+                    </div>
+
+                    <!-- Rewards Card -->
+                    <div class="card">
+                        <h3 class="card-title">Your Rewards</h3>
+                        <div class="points-circle-container">
+                            <img src="https://via.placeholder.com/120" alt="Health Check-up" class="reward-image">
+                        </div>
+                        <div style="text-align: center; margin-bottom: 16px;">
+                            <span class="rewards-count">0</span>
+                            <span class="reward-label">Free Health Check-up</span>
+                        </div>
+                        <button class="button button-disabled" disabled>
+                            Redeem
+                        </button>
+                    </div>
+                </div>
+
+                <div class="history-card">
+                    <div class="history-text">
+                        <span>100 Credits</span> earned on 05/04/25 were credited
+                    </div>
+                    <button class="history-button">
+                        History 
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="m9 18 6-6-6-6"/>
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- How it works -->
+                <div>
+                    <h3 class="section-title">How it works</h3>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <div class="icon-container blue-bg">
+                                <img src="https://via.placeholder.com/40" alt="Donation">
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="info-title">1 Donation = 100 Credits</h4>
+                            <p class="info-text">Earn 100 credits on every eligible blood donation</p>
+                            <p class="info-note">
+                                Credits will be credited within 24 hours of donation verification
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <div class="icon-container red-bg">
+                                <img src="https://via.placeholder.com/40" alt="Health reward">
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="info-title">500 credits = FREE HEALTH CHECK-UP</h4>
+                            <p class="info-text">Redeem 500 credits for a Free Basic Health Check-up</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Section -->
+            <div id="faq-content" class="hidden">
+                <div class="faq-container" id="faq-container">
+                    <!-- FAQ items will be inserted here by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const rewardsData = {
+            points: 0,
+            totalNeeded: 500,
+            freeReward: 0,
+            lastDonation: {
+                points: 100,
+                date: '05/04/25'
+            }
+        };
+        
+        const faqs = [
+            {
+                question: "What is the Blood Heroes Rewards Program?",
+                answer: "Blood Heroes Rewards is our loyalty program designed to thank our regular blood donors. You earn credits with each donation that can be redeemed for health products and services."
+            },
+            {
+                question: "How can I avail the benefits of the program?",
+                answer: "Simply register at any of our donation centers with your valid ID. Your rewards account will be automatically created, and you'll start earning credits with your first donation."
+            },
+            {
+                question: "How does this program work?",
+                answer: "For each eligible blood donation, you earn 100 credits. Once you accumulate 500 credits, you can redeem them for health check-ups, wellness products, or gift cards from our partner organizations."
+            },
+            {
+                question: "Is there a limit to how many Blood Heroes Credits I can earn or redeem in a year?",
+                answer: "You can donate blood up to 4 times a year (for whole blood) as per medical guidelines, so the maximum credits you can earn is 400 per year. There's no limit on redemption."
+            },
+            {
+                question: "Do I need to pay anything while redeeming points for rewards?",
+                answer: "No, once you have sufficient credits, you can redeem them without any additional payment for the base rewards. Premium rewards might require additional credits."
+            },
+            {
+                question: "What are eligible items for redemption?",
+                answer: "Eligible items include basic health check-ups, first aid kits, fitness accessories, nutrition supplements, and gift cards from our healthcare partners."
+            },
+            {
+                question: "Is there any expiry of Blood Heroes Credits?",
+                answer: "Credits are valid for 2 years from the date they are earned. We will notify you before any credits expire."
+            },
+            {
+                question: "How can I check my Blood Heroes Credits balance?",
+                answer: "You can check your balance through our mobile app, website, or by asking at any of our donation centers."
+            },
+            {
+                question: "Is this program applicable in all donation centers?",
+                answer: "Yes, the Blood Heroes Rewards Program is available at all our official donation centers nationwide."
+            },
+            {
+                question: "Is this program applicable on blood donations through partner hospitals or mobile camps?",
+                answer: "Yes, donations made at our partner hospitals and official mobile camps are eligible for earning credits. Just make sure to present your donor ID or phone number."
+            },
+            {
+                question: "Is the program applicable on blood donations through special drives?",
+                answer: "Yes, all donations made during special drives organized by our centers are eligible for credits. Our staff will register your donation accordingly."
+            },
+            {
+                question: "Are the Blood Heroes credits applicable with other health program offers?",
+                answer: "Yes, you can use your Blood Heroes credits alongside most special health program offers, unless specifically excluded."
+            },
+            {
+                question: "Can I opt-out from the program?",
+                answer: "Yes, you can opt-out at any time by contacting our customer support or updating your preferences in your account settings."
+            },
+            {
+                question: "Can I redeem my Blood Heroes Credits for cash?",
+                answer: "No, credits cannot be redeemed for cash. They can only be used for the rewards available in our catalog."
+            },
+            {
+                question: "Can I transfer/gift/share my Blood Heroes Credits to someone else?",
+                answer: "Yes, you can gift your credits to family members who are also registered in our system. Contact our support team to arrange this."
+            },
+            {
+                question: "I have just donated blood but I don't see the Blood Heroes Credits in my account.",
+                answer: "Credits are typically added within 24 hours of donation. If you don't see them after this period, please contact our support with your donation receipt."
+            },
+            {
+                question: "Will I earn Blood Heroes Credits for plasma or platelet donations too?",
+                answer: "Yes, plasma and platelet donations earn the same 100 credits as whole blood donations. Some special donations may earn bonus credits."
+            },
+            {
+                question: "What happens if I'm deferred from donating?",
+                answer: "If you're temporarily deferred for medical reasons, you'll receive 25 goodwill credits for your attempt and willingness to donate."
+            }
+        ];
+
+        // DOM Elements
+        const rewardsTab = document.getElementById('rewards-tab');
+        const faqTab = document.getElementById('faq-tab');
+        const rewardsContent = document.getElementById('rewards-content');
+        const faqContent = document.getElementById('faq-content');
+        const pageTitle = document.getElementById('page-title');
+        const faqContainer = document.getElementById('faq-container');
+
+        // Tab switching
+        rewardsTab.addEventListener('click', function() {
+            rewardsTab.classList.add('active');
+            faqTab.classList.remove('active');
+            rewardsContent.classList.remove('hidden');
+            faqContent.classList.add('hidden');
+            pageTitle.textContent = 'Blood Heroes Rewards';
+        });
+
+        faqTab.addEventListener('click', function() {
+            faqTab.classList.add('active');
+            rewardsTab.classList.remove('active');
+            faqContent.classList.remove('hidden');
+            rewardsContent.classList.add('hidden');
+            pageTitle.textContent = 'Frequently Asked Questions';
+        });
+
+        // Generate FAQ items
+        function createFaqItem(question, answer, index) {
+            const faqItem = document.createElement('div');
+            faqItem.className = 'faq-item';
+            
+            const questionButton = document.createElement('button');
+            questionButton.className = 'faq-question';
+            questionButton.innerHTML = `
+                <span class="question-text">${question}</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m9 18 6-6-6-6"/>
+                </svg>
+            `;
+            
+            const answerDiv = document.createElement('div');
+            answerDiv.className = 'faq-answer hidden';
+            answerDiv.innerHTML = `<p class="answer-text">${answer}</p>`;
+            
+            faqItem.appendChild(questionButton);
+            faqItem.appendChild(answerDiv);
+            
+            questionButton.addEventListener('click', function() {
+                const isOpen = !answerDiv.classList.contains('hidden');
+                
+                // Close all other FAQs
+                document.querySelectorAll('.faq-answer').forEach(item => {
+                    item.classList.add('hidden');
+                });
+                
+                document.querySelectorAll('.faq-question svg').forEach(icon => {
+                    icon.innerHTML = `<path d="m9 18 6-6-6-6"/>`;
+                });
+                
+                // Toggle current FAQ
+                if (isOpen) {
+                    answerDiv.classList.add('hidden');
+                    questionButton.querySelector('svg').innerHTML = `<path d="m9 18 6-6-6-6"/>`;
+                } else {
+                    answerDiv.classList.remove('hidden');
+                    questionButton.querySelector('svg').innerHTML = `<path d="m19 9-7 7-7-7"/>`;
+                }
+            });
+            
+            return faqItem;
+        }
+
+        // Initialize FAQ section
+        faqs.forEach((faq, index) => {
+            const faqItem = createFaqItem(faq.question, faq.answer, index);
+            faqContainer.appendChild(faqItem);
+        });
+    </script>
+</body>
+</html>

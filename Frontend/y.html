@@ -1,0 +1,1187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway - LifeDrop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #f1faee;
+            --dark: #1d3557;
+            --light: #a8dadc;
+            --accent: #457b9d;
+            --success: #2ecc71;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background-color: #d32f3d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(230, 57, 70, 0.3);
+        }
+        
+        .btn-success {
+            background-color: var(--success);
+            color: white;
+            box-shadow: 0 4px 8px rgba(46, 204, 113, 0.2);
+        }
+        
+        .btn-success:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(46, 204, 113, 0.3);
+        }
+        
+        /* Payment Gateway Styles */
+        .payment-container {
+            max-width: 1000px;
+            margin: 120px auto 60px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .payment-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .payment-header h1 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .payment-header p {
+            opacity: 0.9;
+        }
+        
+        .payment-body {
+            padding: 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+        }
+        
+        .payment-form {
+            flex: 1 1 60%;
+            min-width: 300px;
+        }
+        
+        .payment-summary {
+            flex: 1 1 30%;
+            min-width: 250px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(69, 123, 157, 0.1);
+        }
+        
+        .card-details {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .card-number {
+            flex: 1;
+        }
+        
+        .card-expiry, .card-cvv {
+            flex: 0 0 calc(50% - 0.5rem);
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .payment-method {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method.active {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(230, 57, 70, 0.1);
+        }
+        
+        .payment-method i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+        
+        .payment-method.active i {
+            color: var(--primary);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-top: 2px solid #ddd;
+            margin-top: 1rem;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .blood-type-selector {
+            margin-bottom: 1.5rem;
+        }
+        
+        .blood-type-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        
+        .blood-type-option {
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .blood-type-option.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .card-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: #aaa;
+        }
+        
+        .input-container {
+            position: relative;
+        }
+        
+        .blood-request-note {
+            background-color: #f1faee;
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .blood-request-note p {
+            margin: 0;
+            color: #555;
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background-color: white;
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: modalIn 0.3s ease;
+        }
+        
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .success-icon {
+            font-size: 4rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+        
+        .modal-text {
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 3rem 1rem;
+            margin-top: 4rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+            bottom: -8px;
+            left: 0;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .contact-info i {
+            margin-right: 0.8rem;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: #444;
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid #444;
+            margin-top: 3rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+                transition: all 0.4s ease;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .payment-body {
+                flex-direction: column;
+            }
+            
+            .card-details {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .payment-methods {
+                flex-wrap: wrap;
+            }
+            
+            .payment-method {
+                flex: 0 0 calc(50% - 0.5rem);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <i class="fas fa-tint"></i>
+                <span>LifeDrop</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="A.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="D.html">Donate</a></li>
+                <li><a href="e.html">Request</a></li>
+                <li><a href="h.html">Contact</a></li>
+                <li><a href="B.html" >Login</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Payment Gateway -->
+    <div class="payment-container animate__animated animate__fadeIn">
+        <div class="payment-header">
+            <h1>Blood Request Payment</h1>
+            <p>Complete your payment to process your blood request</p>
+        </div>
+        <div class="payment-body">
+            <div class="payment-form">
+                <div class="blood-request-note">
+                    <p><strong>Note:</strong> This payment is for processing your blood request. The fee covers testing, storage, and delivery of the blood products you need.</p>
+                </div>
+                
+                <h3 class="section-title">Request Information</h3>
+                <div class="form-group">
+                    <label for="patient-name">Patient Name</label>
+                    <input type="text" id="patient-name" class="form-control" placeholder="Enter patient name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="hospital">Hospital/Clinic Name</label>
+                    <input type="text" id="hospital" class="form-control" placeholder="Enter hospital or clinic name">
+                </div>
+                
+                <div class="blood-type-selector">
+                    <label>Blood Type Needed</label>
+                    <div class="blood-type-options">
+                        <div class="blood-type-option" data-type="A+">A+</div>
+                        <div class="blood-type-option" data-type="A-">A-</div>
+                        <div class="blood-type-option" data-type="B+">B+</div>
+                        <div class="blood-type-option" data-type="B-">B-</div>
+                        <div class="blood-type-option" data-type="AB+">AB+</div>
+                        <div class="blood-type-option" data-type="AB-">AB-</div>
+                        <div class="blood-type-option" data-type="O+">O+</div>
+                        <div class="blood-type-option" data-type="O-">O-</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="units">Number of Units</label>
+                    <input type="number" id="units" class="form-control" value="1" min="1" max="10">
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email (for confirmation)</label>
+                    <input type="email" id="email" class="form-control" placeholder="Enter your email">
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" class="form-control" placeholder="Enter your phone number">
+                </div>
+                
+                <h3 class="section-title">Payment Method</h3>
+                <div class="payment-methods">
+                    <div class="payment-method " data-method="credit-card">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Credit Card</span>
+                    </div>
+                    <div class="payment-method" data-method="paypal">
+                        <i class="fab fa-paypal"></i>
+                        <span>PayPal</span>
+                    </div>
+                    <div class="payment-method" data-method="bank">
+                        <i class="fas fa-university"></i>
+                        <span>Bank Transfer</span>
+                    </div>
+                    <div class="payment-method" data-method="mobile">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span>Mobile Payment</span>
+                    </div>
+                </div>
+                
+                <div id="credit-card-form">
+                    <div class="form-group">
+                        <label for="cardholder">Cardholder Name</label>
+                        <input type="text" id="cardholder" class="form-control" placeholder="Name on card">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="card-number">Card Number</label>
+                        <div class="input-container">
+                            <input type="text" id="card-number" class="form-control" placeholder="1234 5678 9012 3456">
+                            <i class="fab fa-cc-visa card-icon"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="card-details">
+                        <div class="form-group card-expiry">
+                            <label for="expiry">Expiry Date</label>
+                            <input type="text" id="expiry" class="form-control" placeholder="MM/YY">
+                        </div>
+                        
+                        <div class="form-group card-cvv">
+                            <label for="cvv">CVV</label>
+                            <input type="text" id="cvv" class="form-control" placeholder="123">
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="paypal-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="paypal-email">PayPal Email</label>
+                        <input type="email" id="paypal-email" class="form-control" placeholder="Enter your PayPal email">
+                    </div>
+                </div>
+                
+                <div id="bank-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="account-name">Account Holder Name</label>
+                        <input type="text" id="account-name" class="form-control" placeholder="Enter account holder name">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="account-number">Account Number</label>
+                        <input type="text" id="account-number" class="form-control" placeholder="Enter account number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bank-name">Bank Name</label>
+                        <input type="text" id="bank-name" class="form-control" placeholder="Enter bank name">
+                    </div>
+                </div>
+                
+                <div id="mobile-form" style="display: none;">
+                    <div class="form-group">
+                        <label for="mobile-number">Mobile Number</label>
+                        <input type="tel" id="mobile-number" class="form-control" placeholder="Enter mobile number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="mobile-provider">Service Provider</label>
+                        <select id="mobile-provider" class="form-control">
+                            <option value="">Select provider</option>
+                            <option value="apple-pay">Apple Pay</option>
+                            <option value="google-pay">Google Pay</option>
+                            <option value="samsung-pay">Samsung Pay</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-summary">
+                <h3 class="section-title">Order Summary</h3>
+                
+                <div class="summary-item">
+                    <span>Processing Fee</span>
+                    <span>$15.00</span>
+                </div>
+                
+                <div class="summary-item">
+                    <span>Blood Units (x<span id="summary-units">1</span>)</span>
+                    <span id="units-cost">$120.00</span>
+                </div>
+                
+                <div class="summary-item">
+                    <span>Testing & Compatibility</span>
+                    <span>$35.00</span>
+                </div>
+                
+                <div class="summary-item">
+                    <span>Delivery</span>
+                    <span>$10.00</span>
+                </div>
+                
+                <div class="summary-total">
+                    <span>Total</span>
+                    <span id="total-cost">$180.00</span>
+                </div>
+                
+                <button id="pay-button" class="btn btn-primary" style="width: 100%; margin-top: 1.5rem;">Complete Payment</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Success Modal -->
+    <div id="success-modal" class="modal">
+        <div class="modal-content">
+            <i class="fas fa-check-circle success-icon"></i>
+            <h2 class="modal-title">Payment Successful!</h2>
+            <p class="modal-text">
+                Your blood request has been received and processed successfully. A confirmation email has been sent to your email address with all the details.
+            </p>
+            <p class="modal-text">
+                Request Reference: <strong>#BLD-<span id="reference-number">12345</span></strong>
+            </p>
+            <a href="A.html" class="btn btn-success">Return to Home</a>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>LifeDrop</h3>
+                <p>A modern blood donation management system dedicated to saving lives through efficient donor-recipient matching.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="D.html">Donate Blood</a></li>
+                    <li><a href="e.html">Request Blood</a></li>
+                    <li><a href="#">Blood Banks</a></li>
+                    <li><a href="h.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul class="contact-info">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Health Avenue, Medical District, City</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone"></i>
+                        <span>+1 234 567 8900</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span>info@lifedrop.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 LifeDrop - Blood Donation Management System. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+     // Mobile Menu Toggle
+const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+const navLinks = document.querySelector('.nav-links');
+
+mobileMenuBtn.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    mobileMenuBtn.querySelector('i').classList.toggle('fa-bars');
+    mobileMenuBtn.querySelector('i').classList.toggle('fa-times');
+});
+
+// Blood Type Selection
+const bloodTypeOptions = document.querySelectorAll('.blood-type-option');
+
+bloodTypeOptions.forEach(option => {
+    option.addEventListener('click', () => {
+        // Remove active class from all options
+        bloodTypeOptions.forEach(opt => opt.classList.remove('active'));
+        
+        // Add active class to clicked option
+        option.classList.add('active');
+    });
+});
+
+// Payment Method Selection
+const paymentMethods = document.querySelectorAll('.payment-method');
+const paymentForms = ['credit-card-form', 'paypal-form', 'bank-form', 'mobile-form'];
+
+paymentMethods.forEach(method => {
+    method.addEventListener('click', () => {
+        // Remove active class from all methods
+        paymentMethods.forEach(m => m.classList.remove('active'));
+        
+        // Add active class to clicked method
+        method.classList.add('active');
+        
+        // Hide all payment forms
+        paymentForms.forEach(form => {
+            document.getElementById(form).style.display = 'none';
+        });
+        
+        // Show selected payment form
+        const selectedMethod = method.getAttribute('data-method');
+        if (selectedMethod === 'credit-card') {
+            document.getElementById('credit-card-form').style.display = 'block';
+        } else if (selectedMethod === 'paypal') {
+            document.getElementById('paypal-form').style.display = 'block';
+        } else if (selectedMethod === 'bank') {
+            document.getElementById('bank-form').style.display = 'block';
+        } else if (selectedMethod === 'mobile') {
+            document.getElementById('mobile-form').style.display = 'block';
+        }
+    });
+});
+
+// Update price based on units
+const unitsInput = document.getElementById('units');
+const summaryUnits = document.getElementById('summary-units');
+const unitsCost = document.getElementById('units-cost');
+const totalCost = document.getElementById('total-cost');
+
+unitsInput.addEventListener('change', updatePrice);
+unitsInput.addEventListener('input', updatePrice);
+
+function updatePrice() {
+    const units = parseInt(unitsInput.value) || 1;
+    const unitPrice = 120;
+    const processingFee = 15;
+    const testingFee = 35;
+    const deliveryFee = 10;
+    
+    const unitsCostValue = units * unitPrice;
+    const totalCostValue = unitsCostValue + processingFee + testingFee + deliveryFee;
+    
+    summaryUnits.textContent = units;
+    unitsCost.textContent = `$${unitsCostValue.toFixed(2)}`;
+    totalCost.textContent = `$${totalCostValue.toFixed(2)}`;
+}
+
+// Card Number Formatting
+const cardInput = document.getElementById('card-number');
+
+cardInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    let formattedValue = '';
+    
+    for (let i = 0; i < value.length; i++) {
+        if (i > 0 && i % 4 === 0) {
+            formattedValue += ' ';
+        }
+        formattedValue += value[i];
+    }
+    
+    // Update card icon based on first digit
+    const cardIcon = document.querySelector('.card-icon');
+    const firstDigit = value[0];
+    
+    if (firstDigit === '4') {
+        cardIcon.className = 'fab fa-cc-visa card-icon';
+    } else if (firstDigit === '5') {
+        cardIcon.className = 'fab fa-cc-mastercard card-icon';
+    } else if (firstDigit === '3') {
+        cardIcon.className = 'fab fa-cc-amex card-icon';
+    } else if (firstDigit === '6') {
+        cardIcon.className = 'fab fa-cc-discover card-icon';
+    } else {
+        cardIcon.className = 'fas fa-credit-card card-icon';
+    }
+    
+    e.target.value = formattedValue.slice(0, 19); // Limit to 16 digits + spaces
+});
+
+// Expiry Date Formatting
+const expiryInput = document.getElementById('expiry');
+
+expiryInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    let formattedValue = '';
+    
+    if (value.length > 0) {
+        // Format MM
+        formattedValue = value.slice(0, 2);
+        
+        // Add slash after MM if there are more digits
+        if (value.length > 2) {
+            formattedValue += '/' + value.slice(2, 4);
+        }
+    }
+    
+    e.target.value = formattedValue;
+    
+    // Auto-correct month if greater than 12
+    if (value.length >= 2) {
+        const month = parseInt(value.slice(0, 2));
+        if (month > 12) {
+            e.target.value = '12' + (value.length > 2 ? '/' + value.slice(2, 4) : '');
+        }
+    }
+});
+
+// CVV Validation
+const cvvInput = document.getElementById('cvv');
+
+cvvInput.addEventListener('input', (e) => {
+    let value = e.target.value.replace(/\D/g, '');
+    e.target.value = value.slice(0, 3); // Limit to 3 digits
+});
+
+payButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    // Basic validation
+    const patientName = document.getElementById('patient-name').value;
+    const hospital = document.getElementById('hospital').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    
+    // Check if blood type is selected
+    const selectedBloodType = document.querySelector('.blood-type-option.active');
+    
+    let isValid = true;
+    
+    if (!patientName || !hospital || !email || !phone) {
+        isValid = false;
+        alert('Please fill in all required fields');
+    } else if (!selectedBloodType) {
+        isValid = false;
+        alert('Please select a blood type');
+    } else {
+        // Additional validation based on payment method
+        const activeMethod = document.querySelector('.payment-method.active');
+        const paymentMethod = activeMethod.getAttribute('data-method');
+        
+        if (paymentMethod === 'credit-card') {
+            const cardholderName = document.getElementById('cardholder').value;
+            const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+            const expiry = document.getElementById('expiry').value;
+            const cvv = document.getElementById('cvv').value;
+            
+            if (!cardholderName || !cardNumber || !expiry || !cvv) {
+                isValid = false;
+                alert('Please fill in all credit card details');
+            } else if (cardNumber.length < 16) {
+                isValid = false;
+                alert('Please enter a valid card number');
+            } else if (expiry.length < 5) {
+                isValid = false;
+                alert('Please enter a valid expiry date (MM/YY)');
+            } else if (cvv.length < 3) {
+                isValid = false;
+                alert('Please enter a valid CVV');
+            }
+        } else if (paymentMethod === 'paypal') {
+            const paypalEmail = document.getElementById('paypal-email').value;
+            
+            if (!paypalEmail) {
+                isValid = false;
+                alert('Please enter your PayPal email');
+            }
+        } else if (paymentMethod === 'bank') {
+            const accountName = document.getElementById('account-name').value;
+            const accountNumber = document.getElementById('account-number').value;
+            const bankName = document.getElementById('bank-name').value;
+            
+            if (!accountName || !accountNumber || !bankName) {
+                isValid = false;
+                alert('Please fill in all bank details');
+            }
+        } else if (paymentMethod === 'mobile') {
+            const mobileNumber = document.getElementById('mobile-number').value;
+            const mobileProvider = document.getElementById('mobile-provider').value;
+            
+            if (!mobileNumber || !mobileProvider) {
+                isValid = false;
+                alert('Please fill in all mobile payment details');
+            }
+        }
+    }
+    
+    if (isValid) {
+        // Generate random reference number
+        const randomRef = Math.floor(10000 + Math.random() * 90000);
+        referenceNumber.textContent = randomRef;
+        
+        // Show success modal
+        successModal.classList.add('active');
+    }
+});
+
+// Close modal when clicking outside
+successModal.addEventListener('click', (e) => {
+    if (e.target === successModal) {
+        successModal.classList.remove('active');
+    }
+});
+
+// Initialize price on page load
+document.addEventListener('DOMContentLoaded', () => {
+    updatePrice();
+    
+    // Set default blood type
+    if (bloodTypeOptions.length > 0) {
+        bloodTypeOptions[0].classList.add('active');
+    }
+});
+const payButton = document.getElementById('pay-button');
+const successModal = document.getElementById('success-modal');
+const referenceNumber = document.getElementById('reference-number');
+
+payButton.addEventListener('click', (e) => {
+    e.preventDefault();
+    
+    // Basic validation
+    const patientName = document.getElementById('patient-name').value;
+    const hospital = document.getElementById('hospital').value;
+    const email = document.getElementById('email').value;
+    const phone = document.getElementById('phone').value;
+    
+    // Check if blood type is selected
+    const selectedBloodType = document.querySelector('.blood-type-option.active');
+    const bloodType = selectedBloodType ? selectedBloodType.getAttribute('data-type') : null;
+    
+    let isValid = true;
+    
+    if (!patientName || !hospital || !email || !phone) {
+        isValid = false;
+        alert('Please fill in all required fields');
+    } else if (!selectedBloodType) {
+        isValid = false;
+        alert('Please select a blood type');
+    } else {
+        // Additional validation based on payment method
+        const activeMethod = document.querySelector('.payment-method.active');
+        const paymentMethod = activeMethod.getAttribute('data-method');
+        
+        if (paymentMethod === 'credit-card') {
+            const cardholderName = document.getElementById('cardholder').value;
+            const cardNumber = document.getElementById('card-number').value.replace(/\s/g, '');
+            const expiry = document.getElementById('expiry').value;
+            const cvv = document.getElementById('cvv').value;
+            
+            if (!cardholderName || !cardNumber || !expiry || !cvv) {
+                isValid = false;
+                alert('Please fill in all credit card details');
+            } else if (cardNumber.length < 16) {
+                isValid = false;
+                alert('Please enter a valid card number');
+            } else if (expiry.length < 5) {
+                isValid = false;
+                alert('Please enter a valid expiry date (MM/YY)');
+            } else if (cvv.length < 3) {
+                isValid = false;
+                alert('Please enter a valid CVV');
+            }
+        } else if (paymentMethod === 'paypal') {
+            const paypalEmail = document.getElementById('paypal-email').value;
+            
+            if (!paypalEmail) {
+                isValid = false;
+                alert('Please enter your PayPal email');
+            }
+        } else if (paymentMethod === 'bank') {
+            const accountName = document.getElementById('account-name').value;
+            const accountNumber = document.getElementById('account-number').value;
+            const bankName = document.getElementById('bank-name').value;
+            
+            if (!accountName || !accountNumber || !bankName) {
+                isValid = false;
+                alert('Please fill in all bank details');
+            }
+        } else if (paymentMethod === 'mobile') {
+            const mobileNumber = document.getElementById('mobile-number').value;
+            const mobileProvider = document.getElementById('mobile-provider').value;
+            
+            if (!mobileNumber || !mobileProvider) {
+                isValid = false;
+                alert('Please fill in all mobile payment details');
+            }
+        }
+    }
+    
+    if (isValid) {
+        // Generate random reference number
+        const randomRef = Math.floor(10000 + Math.random() * 90000);
+        referenceNumber.textContent = randomRef;
+        
+        // Get payment details
+        const units = document.getElementById('units').value;
+        const totalCost = document.getElementById('total-cost').textContent;
+        
+        // Prepare data for email sending
+        const emailData = {
+            to: email,
+            patientName: patientName,
+            hospital: hospital,
+            bloodType: bloodType,
+            units: units,
+            totalCost: totalCost,
+            referenceNumber: randomRef,
+            phone: phone,
+            paymentMethod: document.querySelector('.payment-method.active').getAttribute('data-method')
+        };
+        
+        // Send request to server to send email
+        sendConfirmationEmail(emailData)
+            .then(response => {
+                // Show success modal
+                successModal.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error sending email:', error);
+                alert('Your payment was processed, but there was an issue sending the confirmation email. Please save your reference number: ' + randomRef);
+                successModal.classList.add('active');
+            });
+    }
+});
+
+// Function to send confirmation email via the server
+fetch('http://127.0.0.1:5000/api/send-confirmation-email', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        to: 'test@example.com',
+        patientName: 'John Doe',
+        hospital: 'City Hospital',
+        bloodType: 'O+',
+        units: '2',
+        totalCost: '100',
+        phone: '1234567890',
+        paymentMethod: 'credit-card'
+    })
+})
+.then(response => response.json())
+.then(data => console.log('Success:', data))
+.catch(error => console.error('Error:', error));
+
+</script>

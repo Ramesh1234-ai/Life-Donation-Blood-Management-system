@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Donation Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #f1faee;
+            --dark: #1d3557;
+            --light: #a8dadc;
+            --accent: #457b9d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background-color: #d32f3d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(230, 57, 70, 0.3);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/api/placeholder/1200/800') center/cover no-repeat;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            padding: 2rem;
+            z-index: 1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .features {
+            padding: 5rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: -10px;
+            left: 25%;
+        }
+        
+        .section-title p {
+            color: #6c757d;
+            font-size: 1.1rem;
+        }
+        
+        .features-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .feature-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .feature-icon {
+            background-color: var(--primary);
+            color: white;
+            font-size: 2.5rem;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .feature-content {
+            padding: 1.5rem;
+        }
+        
+        .feature-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .feature-content p {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .statistics {
+            background-color: var(--primary);
+            color: white;
+            padding: 4rem 1rem;
+            text-align: center;
+        }
+        
+        .statistics-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-item p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .process {
+            padding: 5rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .process-steps {
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            margin: 2rem auto 0;
+        }
+        
+        .step {
+            display: flex;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .step:last-child {
+            margin-bottom: 0;
+        }
+        
+        .step-number {
+            background-color: var(--primary);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-right: 1.5rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-content {
+            flex-grow: 1;
+        }
+        
+        .step-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .step-content p {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .step::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: #ddd;
+            top: 60px;
+            bottom: -60px;
+            left: 30px;
+            z-index: 1;
+        }
+        
+        .step:last-child::after {
+            display: none;
+        }
+        
+        .cta {
+            background-color: var(--dark);
+            color: white;
+            padding: 5rem 1rem;
+            text-align: center;
+        }
+        
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 3rem 1rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+            bottom: -8px;
+            left: 0;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .contact-info i {
+            margin-right: 0.8rem;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: #444;
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid #444;
+            margin-top: 3rem;
+        }
+        
+        .login-btn {
+            background-color: transparent;
+            border: 2px solid white;
+            color: white;
+        }
+        
+        .login-btn:hover {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+                transition: all 0.4s ease;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .step {
+                flex-direction: column;
+                text-align: center;
+                align-items: center;
+            }
+            
+            .step-number {
+                margin-right: 0;
+                margin-bottom: 1rem;
+            }
+            
+            .step::after {
+                display: none;
+            }
+        }
+        
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Blood Drop Animation */
+        .blood-drop {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--primary);
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            animation: drip 5s infinite linear;
+            opacity: 0;
+        }
+        
+        @keyframes drip {
+            0% {
+                transform: rotate(-45deg) translateY(-100vh);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.8;
+            }
+            80% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: rotate(-45deg) translateY(100vh);
+                opacity: 0;
+            }
+        }
+        
+        /* Counter Animation */
+        .counting {
+            animation: countUp 2s forwards;
+        }
+        
+        @keyframes countUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Chatbot Button */
+        .chat-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #e60000;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            transition: all 0.3s ease;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-icon {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* Chatbot Container */
+        .chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            display: none;
+            flex-direction: column;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .chatbot-header {
+            background-color: #e60000;
+            color: white;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .chatbot-header h2 {
+            font-size: 18px;
+            font-weight: 500;
+        }
+
+        .close-btn {
+            cursor: pointer;
+            font-size: 20px;
+        }
+
+        .chatbot-messages {
+            height: 350px;
+            background-color: white;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 18px;
+            position: relative;
+            word-wrap: break-word;
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+            color: #333;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background-color: #e60000;
+            color: white;
+        }
+
+        .chatbot-input {
+            display: flex;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .chatbot-input button {
+            margin-left: 10px;
+            padding: 10px 15px;
+            background-color: #e60000;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .options-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+        .option-button {
+            margin: 5px;
+            padding: 8px 15px;
+            background-color: #f1f1f1;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .option-button:hover {
+            background-color: #e6e6e6;
+        }
+
+        .bot-typing {
+            align-self: flex-start;
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 18px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .typing-animation {
+            display: inline-flex;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #777;
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing-animation 1.4s infinite;
+        }
+
+        .typing-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing-animation {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+            100% { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <i class="fas fa-tint"></i>
+                <span>LifeDrop</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="A.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="D.html">Donate</a></li>
+                <li><a href="e.html">Request</a></li>
+                <li><a href="h.html">Contact</a></li>
+                <li><a href="B.html">Login</a></li>
+                <li><a href="y.html">Payment</a></li>
+                <li><a href="z.html">Rewards</a></li>
+            </div>
+            </div>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div id="blood-drops-container"></div>
+        <div class="hero-content animate__animated animate__fadeIn">
+            <h1>Donate Blood, Save Lives</h1>
+            <p>Your small contribution can make a huge difference. Join our blood donation management system to help those in need and be part of a life-saving community.</p>
+            <div class="hero-btns">
+                <a href="D.html" class="btn btn-primary animate__animated animate__pulse animate__infinite animate__slower">Donate Now</a>
+                <a href="e.html" class="btn btn-primary animate__animated animate__pulse animate__infinite animate__slower">Request Blood</a>
+                <a href="y.html" class="btn btn-primary animate__animated animate__pulse animate__infinite animate__slower">Payment For Blood</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <div class="section-title fade-in">
+            <h2>Our Features</h2>
+            <p>Efficient blood donation management at your fingertips</p>
+        </div>
+        <div class="features-container">
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <a href="D.html">
+                <div class="feature-content">
+                    <h3>Donor Registration</h3>
+                    <p>Easy and quick registration process for blood donors with complete history tracking and verification.</p>
+                </div>
+                </a>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-hand-holding-medical"></i>
+                </div>
+                <a href="e.html">
+                <div class="feature-content">
+                    <h3>Blood Requests</h3>
+                    <p>Simple blood request system for recipients with real-time notifications about blood availability.</p>
+                </div>
+            </a>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-database"></i>
+                </div>
+            <a href="b.html">
+                <div class="feature-content">
+                    <h3>Inventory Management</h3>
+                    <p>Comprehensive blood inventory management with real-time updates and monitoring.</p>
+                </div>
+            </a>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-exchange-alt"></i>
+                </div>
+                <a href="f.html">
+                <div class="feature-content">
+                    <h3>Matching Process</h3>
+                    <p>Intelligent matching system to connect donors with compatible recipients efficiently.</p>
+                </div>
+            </a>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <a href="g.html">
+                <div class="feature-content">
+                    <h3>Notifications</h3>
+                    <p>Automated alerts about blood availability, donation drives, and important updates.</p>
+                </div>
+            </a>
+            </div>
+            <div class="feature-card fade-in">
+                <div class="feature-icon">
+                    <i class="fas fa-Payment"></i>
+                </div>
+            <a href="y.html">
+                <div class="feature-content">
+                    <h3>Payment</h3>
+                    <p>Automated alerts about Blood Prices And Each Blood Ratio.</p>
+                </div>
+            </a>
+        </div>
+    </section>
+    
+    <!-- Statistics Section -->
+    <section class="statistics">
+        <div class="statistics-container">
+            <div class="stat-item">
+                <h3 class="counter" data-target="15000">0</h3>
+                <p>Registered Donors</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="counter" data-target="12500">0</h3>
+                <p>Successful Donations</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="counter" data-target="10000">0</h3>
+                <p>Lives Saved</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="counter" data-target="500">0</h3>
+                <p>Partner Hospitals</p>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Donation Process Section -->
+    <section class="process">
+        <div class="section-title fade-in">
+            <h2>How It Works</h2>
+            <p>Simple steps to donate blood and save lives</p>
+        </div>
+        <div class="process-steps">
+            <div class="step fade-in">
+                <div class="step-number">1</div>
+                <div class="step-content">
+                    <h3>Register as a Donor</h3>
+                    <p>Create an account and complete your donor profile with all necessary health information and blood group details.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">2</div>
+                <div class="step-content">
+                    <h3>Schedule a Donation</h3>
+                    <p>Choose a convenient date and location for your blood donation from available options.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">3</div>
+                <div class="step-content">
+                    <h3>Complete Health Check</h3>
+                    <p>Undergo a quick health check to ensure you're eligible to donate blood safely.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">4</div>
+                <div class="step-content">
+                    <h3>Donate Blood</h3>
+                    <p>The actual blood donation process takes only about 10 minutes. Rest assured, it's safe and supervised by healthcare professionals.</p>
+                </div>
+            </div>
+            <div class="step fade-in">
+                <div class="step-number">5</div>
+                <div class="step-content">
+                    <h3>Track Your Impact</h3>
+                    <p>Follow your donation journey and see how your contribution is making a difference in saving lives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Chatbot Button -->
+    <div class="chat-button" id="chat-button">
+        <svg class="chat-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg>
+    </div>
+
+    <!-- Chatbot Container -->
+    <div class="chatbot-container" id="chatbot-container">
+        <div class="chatbot-header">
+            <h2>Blood Donation Assistant</h2>
+            <span class="close-btn" id="close-btn">×</span>
+        </div>
+        
+        <div class="chatbot-messages" id="chatbot-messages">
+            <div class="bot-typing" id="bot-typing">
+                <div class="typing-animation">
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                    <div class="typing-dot"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="chatbot-input">
+            <input type="text" id="user-input" placeholder="Type your message...">
+            <button id="send-btn">Send</button>
+        </div>
+    </div>
+    
+    <!-- Call to Action Section -->
+    <section class="cta">
+        <div class="cta-container fade-in">
+            <h2>Be a Lifesaver Today</h2>
+            <p>Your blood donation can save up to three lives. Join our mission to ensure blood is available for those who need it most.</p>
+            <a href="#" class="btn btn-primary">Start Donating</a>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>LifeDrop</h3>
+                <p>A modern blood donation management system dedicated to saving lives through efficient donor-recipient matching.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="a.html">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="D.html">Donate Blood</a></li>
+                    <li><a href="e.html">Request Blood</a></li>
+                    <li><a href="e.html">Blood Banks</a></li>
+                    <li><a href="h.html">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact Info</h3>
+                <ul class="contact-info">
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Health Avenue, Medical District, City</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-phone"></i>
+                        <span>+1 234 567 8900</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span>info@lifedrop.com</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2025 LifeDrop - Blood Donation Management System. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenuBtn.querySelector('i').classList.toggle('fa-bars');
+            mobileMenuBtn.querySelector('i').classList.toggle('fa-times');
+        });
+        
+        // Scroll Animation
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        function checkFade() {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+        }
+        
+        // Blood Drops Animation
+        function createBloodDrops() {
+            const container = document.getElementById('blood-drops-container');
+            const containerWidth = container.offsetWidth;
+            
+            for (let i = 0; i < 15; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('blood-drop');
+                
+                // Random positioning and timing
+                const size = Math.random() * 15 + 10;
+                const posX = Math.random() * containerWidth;
+                const delay = Math.random() * 15;
+                const duration = Math.random() * 10 + 5;
+                
+                drop.style.width = `${size}px`;
+                drop.style.height = `${size}px`;
+                drop.style.left = `${posX}px`;
+                drop.style.animationDelay = `${delay}s`;
+                drop.style.animationDuration = `${duration}s`;
+                
+                container.appendChild(drop);
+            }
+        }
+        
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter');
+            const speed = 200;
+            
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                let count = 0;
+                
+                const updateCount = () => {
+                    const increment = target / speed;
+                    
+                    if (count < target) {
+                        count += increment;
+                        counter.innerText = Math.floor(count);
+                        setTimeout(updateCount, 1);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                };
+                
+                updateCount();
+            });
+        }
+        
+        // Navbar Scroll Effect
+        function navbarScroll() {
+            const navbar = document.querySelector('.navbar');
+            
+            if (window.scrollY > 50) {
+                navbar.style.backgroundColor = '#d32f3d';
+                navbar.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.1)';
+            } else {
+                navbar.style.backgroundColor = 'var(--primary)';
+                navbar.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+            }
+        }
+        
+        // Initialize Animations
+        window.addEventListener('load', () => {
+            createBloodDrops();
+            checkFade();
+        });
+        
+        window.addEventListener('scroll', () => {
+            checkFade();
+            navbarScroll();
+            
+            // Trigger counter animation when statistics section is in view
+            const statsSection = document.querySelector('.statistics');
+            const statsSectionTop = statsSection.getBoundingClientRect().top;
+            
+            if (statsSectionTop < window.innerHeight - 100) {
+                animateCounters();
+                // Remove the scroll event listener after triggering once
+                window.removeEventListener('scroll', this);
+            }
+        });
+        
+        // Initial navbar check
+        navbarScroll();
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatButton = document.getElementById('chat-button');
+            const chatbotContainer = document.getElementById('chatbot-container');
+            const closeBtn = document.getElementById('close-btn');
+            const messagesContainer = document.getElementById('chatbot-messages');
+            const userInput = document.getElementById('user-input');
+            const sendButton = document.getElementById('send-btn');
+            const botTyping = document.getElementById('bot-typing');
+            
+            // Knowledge base for basic chatbot responses
+            const knowledgeBase = {
+                greetings: ['hello', 'hi', 'hey', 'greetings', 'good morning', 'good afternoon', 'good evening'],
+                farewell: ['bye', 'goodbye', 'see you', 'talk to you later'],
+                gratitude: ['thank you', 'thanks', 'appreciate it'],
+                appointment: ['appointment', 'schedule', 'book', 'reserve', 'when can i donate', 'make an appointment'],
+                eligibility: ['eligibility', 'can i donate', 'requirements', 'who can donate', 'am i eligible'],
+                bloodTypes: ['blood type', 'blood types', 'blood group', 'compatible'],
+                location: ['location', 'where', 'center', 'donation center', 'address', 'places', 'nearby'],
+                process: ['process', 'how does it work', 'what happens', 'donation process', 'how to donate'],
+                lastDonation: ['last donation', 'previous donation', 'when did i donate', 'donation history'],
+                urgent: ['urgent', 'emergency', 'need blood', 'blood needed', 'request blood']
+            };
+            
+            // Show/hide chatbot
+            chatButton.addEventListener('click', function() {
+                chatbotContainer.style.display = 'flex';
+                // Only show welcome message if it's the first time opening the chat
+                if (messagesContainer.childElementCount <= 1) { // Only the typing indicator
+                    showWelcomeMessage();
+                }
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                chatbotContainer.style.display = 'none';
+            });
+            
+            // Welcome message
+            function showWelcomeMessage() {
+                showTypingIndicator();
+                
+                setTimeout(() => {
+                    hideTypingIndicator();
+                    addBotMessage("Hello! I'm your Blood Donation Assistant. How can I help you today?");
+                    
+                    setTimeout(() => {
+                        showOptions([
+                            "Schedule an appointment",
+                            "Check my eligibility",
+                            "Learn about blood types",
+                            "Find donation centers",
+                            "How does donation work?"
+                        ]);
+                    }, 500);
+                }, 1500);
+            }
+            
+            // Event listeners for chat input
+            sendButton.addEventListener('click', handleUserInput);
+            userInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleUserInput();
+                }
+            });
+            
+            // Handle user input
+            function handleUserInput() {
+                const message = userInput.value.trim();
+                if (message === '') return;
+                
+                // Add user message to chat
+                addUserMessage(message);
+                userInput.value = '';
+                
+                // Show typing indicator
+                showTypingIndicator();
+                
+                // Process the message and respond after a delay
+                setTimeout(() => {
+                    processUserMessage(message);
+                    hideTypingIndicator();
+                }, 1000);
+            }
+            
+            // Process user message and generate response
+            function processUserMessage(message) {
+                const lowerCaseMsg = message.toLowerCase();
+                
+                // Check for keywords in the message
+                if (containsAny(lowerCaseMsg, knowledgeBase.greetings)) {
+                    addBotMessage("Hello! How can I assist you with blood donation today?");
+                    showOptions([
+                        "Schedule an appointment",
+                        "Check my eligibility",
+                        "Find donation centers"
+                    ]);
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.farewell)) {
+                    addBotMessage("Thank you for chatting with us! Remember, your donation can save up to 3 lives. Have a great day!");
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.gratitude)) {
+                    addBotMessage("You're welcome! Is there anything else I can help you with?");
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.appointment)) {
+                    handleAppointmentScheduling();
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.eligibility)) {
+                    handleEligibilityCheck();
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.bloodTypes)) {
+                    handleBloodTypeInfo();
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.location)) {
+                    handleLocationInfo();
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.process)) {
+                    handleDonationProcess();
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.lastDonation)) {
+                    handleDonationHistory();
+                } 
+                else if (containsAny(lowerCaseMsg, knowledgeBase.urgent)) {
+                    handleUrgentRequest();
+                } 
+                else if (lowerCaseMsg.includes("speak to human") || lowerCaseMsg.includes("talk to person") || lowerCaseMsg.includes("real person")) {
+                    addBotMessage("I'll connect you with a blood donation coordinator right away. Please provide your contact number, and someone will call you within the next 30 minutes.");
+                } 
+                else {
+                    addBotMessage("I'm not sure I understand. Could you please rephrase or select one of these options?");
+                    showOptions([
+                        "Schedule an appointment",
+                        "Check my eligibility",
+                        "Learn about blood types",
+                        "Find donation centers",
+                        "Speak to a human"
+                    ]);
+                }
+            }
+            
+            // Handler functions for different intents
+            function handleAppointmentScheduling() {
+                addBotMessage("I'd be happy to help you schedule a blood donation appointment! What date would you prefer?");
+                showOptions([
+                    "Tomorrow",
+                    "This week",
+                    "Next week",
+                    "Check available slots"
+                ]);
+                url:'http://127.0.0.1:5501/Frontend/z.html'
+            }
+            
+            function handleEligibilityCheck() {
+                addBotMessage("To check your eligibility to donate blood, I need to ask you a few questions:");
+                setTimeout(() => {
+                    addBotMessage("1. Are you between 18-65 years of age?");
+                    showOptions(["Yes", "No"]);
+
+                    addBotMessage("2. Is Your Weight Atleast 45 kg");
+                    showOptions(["Yes", "No"]);
+
+                    addBotMessage("3.Is Your hemoglobin level  is  at least 12.5 g/dL");
+                    showOptions(["Yes", "No"]);
+
+                    addBotMessage("4. Do you  have any chronic illnesses like HIV, Hepatitis B or C in Past");
+                    showOptions(["Yes", "No"]);
+                }, 1000);
+                URL:'http://127.0.0.1:5501/Frontend/D.html'
+            }
+            
+            function handleBloodTypeInfo() {
+                addBotMessage("Blood types are categorized into 8 common types: A+, A-, B+, B-, AB+, AB-, O+, and O-.");
+                setTimeout(() => {
+                    addBotMessage("O- is the universal donor (can donate to any blood type), while AB+ is the universal recipient (can receive any blood type).");
+                    showOptions([
+                        "More about my blood type",
+                        "Blood type compatibility",
+                        "How to know my blood type"
+                    ]);
+                    URL:'http://127.0.0.1:5501/Frontend/f.html'
+                }, 1500);
+            }
+            
+            function handleLocationInfo() {
+                addBotMessage("We have several donation centers in the area. Could you share your city or ZIP code to find the nearest one?");
+            }
+            
+            function handleDonationProcess() {
+                addBotMessage("The blood donation process has a few simple steps:");
+                setTimeout(() => {
+                    addBotMessage("1. Registration: Fill out a form with your personal information\n2. Medical History: Answer questions about your health\n3. Mini-Physical: Quick check of temperature, pulse, blood pressure, and hemoglobin\n4. Donation: Takes about 8-10 minutes\n5. Refreshments: Rest and enjoy snacks before leaving");
+                    showOptions([
+                        "How long does it take?",
+                        "Is it painful?",
+                        "How often can I donate?"
+                    ]);
+                }, 1500);
+            }
+            
+            function handleDonationHistory() {
+                addBotMessage("To check your donation history, I'll need to verify your identity. Please provide your donor ID or registered phone number. Have You DonateD Blood Earlier");
+                showOptions('Yes,No');
+                addBotMessage("So First Donate The Blood Then come, If you have donate the blood the earlier");
+                showOptions("IF you Have Donate blood Earlier go To HomePage>Login Page>DashBoard Page");
+            }
+            
+            function handleUrgentRequest() {
+                addBotMessage("For urgent blood requests, please call our emergency hotline at 1-800-RED-CROSS immediately. This is the fastest way to get assistance.");
+                setTimeout(() => {
+                    addBotMessage("Would you like me to provide information on how to create a blood request?");
+                    showOptions(["Yes, please", "No, thank you"]);
+                    addBotMessage("Yes Plz So Follow The Instuctions");
+                    showOptions("First Step Go to Home page,Then Go to Top Right Corner Of Home Page,Go To Requst,Fill The Form and Your Blood Requst is Created");
+                }, 1000);
+            }
+            
+            // Utility functions
+            function addBotMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', 'bot-message');
+                messageDiv.textContent = message;
+                messagesContainer.appendChild(messageDiv);
+                scrollToBottom();
+            }
+            
+            function addUserMessage(message) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message', 'user-message');
+                messageDiv.textContent = message;
+                messagesContainer.appendChild(messageDiv);
+                scrollToBottom();
+            }
+            
+            function showOptions(options) {
+                const optionsContainer = document.createElement('div');
+                optionsContainer.classList.add('options-container');
+                
+                options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.classList.add('option-button');
+                    button.textContent = option;
+                    button.addEventListener('click', () => {
+                        addUserMessage(option);
+                        
+                        // Show typing indicator
+                        showTypingIndicator();
+                        
+                        // Process the option after a delay
+                        setTimeout(() => {
+                            processUserMessage(option);
+                            hideTypingIndicator();
+                        }, 1000);
+                    });
+                    
+                    optionsContainer.appendChild(button);
+                });
+                
+                messagesContainer.appendChild(optionsContainer);
+                scrollToBottom();
+            }
+            
+            function showTypingIndicator() {
+                botTyping.style.display = 'flex';
+                scrollToBottom();
+            }
+            
+            function hideTypingIndicator() {
+                botTyping.style.display = 'none';
+            }
+            
+            function scrollToBottom() {
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+            
+            function containsAny(text, keywords) {
+                return keywords.some(keyword => text.includes(keyword));
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Registration - Life Drop</title>
+    <style>
+        :root {
+            --primary-color: #e53935;
+            --secondary-color: #f44336;
+            --accent-color: #ffcdd2;
+            --dark-color: #b71c1c;
+            --light-color: #ffffff;
+            --gray-color: #f5f5f5;
+            --text-color: #333333;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: var(--gray-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--light-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background-color: #e0e0e0;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: var(--light-color);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .progress-step.active {
+            background-color: var(--primary-color);
+        }
+        
+        .progress-step-text {
+            position: absolute;
+            top: 35px;
+            font-size: 0.8rem;
+            color: var(--text-color);
+            white-space: nowrap;
+        }
+        
+        .form-section {
+            display: none;
+        }
+        
+        .form-section.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .radio-option input {
+            width: auto;
+        }
+        
+        .checkbox-group {
+            margin-top: 0.5rem;
+        }
+        
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+            gap: 0.5rem;
+        }
+        
+        .checkbox-option input {
+            width: auto;
+        }
+        
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+        
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--light-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-color);
+        }
+        
+        .btn-secondary {
+            background-color: #e0e0e0;
+            color: var(--text-color);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #d0d0d0;
+        }
+        
+        .required::after {
+            content: ' *';
+            color: var(--primary-color);
+        }
+        
+        .error-message {
+            color: var(--primary-color);
+            font-size: 0.85rem;
+            margin-top: 0.3rem;
+            display: none;
+        }
+        
+        input.error, select.error {
+            border-color: var(--primary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            .radio-group {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Donor Registration</h1>
+        
+        <div class="progress-bar">
+            <div class="progress-step active" id="step-1">
+                1
+                <span class="progress-step-text">Personal Info</span>
+            </div>
+            <div class="progress-step" id="step-2">
+                2
+                <span class="progress-step-text">Health Information</span>
+            </div>
+            <div class="progress-step" id="step-3">
+                3
+                <span class="progress-step-text">Eligibility</span>
+            </div>
+            <div class="progress-step" id="step-4">
+                4
+                <span class="progress-step-text">Review</span>
+            </div>
+        </div>
+        
+        <form id="donorRegistrationForm">
+            <!-- Step 1: Personal Information -->
+            <div class="form-section active" id="section-1">
+                <h2>Personal Information</h2>
+                <div class="form-group">
+                    <label for="fullName" class="required">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" required>
+                    <div class="error-message" id="fullName-error">Please enter your full name</div>
+                </div>
+                
+                <div class="form-row" style="display: flex; gap: 20px;">
+                    <div class="form-group" style="flex: 1;">
+                        <label for="dob" class="required">Date of Birth</label>
+                        <input type="date" id="dob" name="dob" required>
+                        <div class="error-message" id="dob-error">You must be at least 18 years old</div>
+                    </div>
+                    
+                    <div class="form-group" style="flex: 1;">
+                        <label for="gender" class="required">Gender</label>
+                        <select id="gender" name="gender" required>
+                            <option value="">Select</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                        <div class="error-message" id="gender-error">Please select your gender</div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bloodType" class="required">Blood Type</label>
+                    <select id="bloodType" name="bloodType" required>
+                        <option value="">Select</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                        <option value="unknown">Unknown</option>
+                    </select>
+                    <div class="error-message" id="bloodType-error">Please select your blood type</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="phone" class="required">Phone Number</label>
+                    <input type="tel" id="phone" name="phone" required>
+                    <div class="error-message" id="phone-error">Please enter a valid phone number</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="required">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                    <div class="error-message" id="email-error">Please enter a valid email address</div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="address" class="required">Address</label>
+                    <textarea id="address" name="address" rows="3" required></textarea>
+                    <div class="error-message" id="address-error">Please enter your address</div>
+                </div>
+                
+                <div class="btn-group">
+                    <div></div> <!-- Empty div for spacing -->
+                    <button type="button" class="btn btn-primary" id="step1Next">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 2: Health Information -->
+            <div class="form-section" id="section-2">
+                <h2>Health Information</h2>
+                
+                <div class="form-group">
+                    <label for="weight" class="required">Weight (kg)</label>
+                    <input type="number" id="weight" name="weight" min="0" required>
+                    <div class="error-message" id="weight-error">Weight must be at least 50kg to donate</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Have you donated blood before?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="donatedYes" name="donatedBefore" value="yes" required>
+                            <label for="donatedYes">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="donatedNo" name="donatedBefore" value="no">
+                            <label for="donatedNo">No</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="donatedBefore-error">Please select an option</div>
+                </div>
+                
+                <div id="lastDonationBlock" class="form-group" style="display: none;">
+                    <label for="lastDonation">Date of Last Donation</label>
+                    <input type="date" id="lastDonation" name="lastDonation">
+                    <div class="error-message" id="lastDonation-error">Last donation must be at least 3 months ago</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Do you have any chronic medical conditions?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="conditionsYes" name="medicalConditions" value="yes" required>
+                            <label for="conditionsYes">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="conditionsNo" name="medicalConditions" value="no">
+                            <label for="conditionsNo">No</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="medicalConditions-error">Please select an option</div>
+                </div>
+                
+                <div id="conditionsBlock" class="form-group" style="display: none;">
+                    <label for="conditionsList">Please specify your conditions</label>
+                    <textarea id="conditionsList" name="conditionsList" rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Are you currently taking any medications?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="medicationsYes" name="medications" value="yes" required>
+                            <label for="medicationsYes">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="medicationsNo" name="medications" value="no">
+                            <label for="medicationsNo">No</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="medications-error">Please select an option</div>
+                </div>
+                
+                <div id="medicationsBlock" class="form-group" style="display: none;">
+                    <label for="medicationsList">Please list your medications</label>
+                    <textarea id="medicationsList" name="medicationsList" rows="3"></textarea>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" id="step2Back">Back</button>
+                    <button type="button" class="btn btn-primary" id="step2Next">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 3: Eligibility Questions -->
+            <div class="form-section" id="section-3">
+                <h2>Eligibility Assessment</h2>
+                <p>Please answer the following questions accurately to determine your eligibility:</p>
+                
+                <div class="form-group">
+                    <label class="required">Have you had any fever, cold or flu in the past 14 days?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="feverYes" name="recentIllness" value="yes" required>
+                            <label for="feverYes">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="feverNo" name="recentIllness" value="no">
+                            <label for="feverNo">No</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Have you had any tattoos or piercings in the last 6 months?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="tattooYes" name="recentTattoo" value="yes" required>
+                            <label for="tattooYes">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="tattooNo" name="recentTattoo" value="no">
+                            <label for="tattooNo">No</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Have you traveled to any malaria-endemic areas in the last 12 months?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="travelYes" name="recentTravel" value="yes" required>
+                            <label for="travelYes">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="travelNo" name="recentTravel" value="no">
+                            <label for="travelNo">No</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">Have you had any surgery in the last 12 months?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="surgeryYes" name="recentSurgery" value="yes" required>
+                            <label for="surgeryYes">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="surgeryNo" name="recentSurgery" value="no">
+                            <label for="surgeryNo">No</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="required">For females: Are you pregnant or have you given birth in the last 6 months?</label>
+                    <div class="radio-group">
+                        <div class="radio-option">
+                            <input type="radio" id="pregnancyYes" name="pregnancy" value="yes">
+                            <label for="pregnancyYes">Yes</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="pregnancyNo" name="pregnancy" value="no">
+                            <label for="pregnancyNo">No</label>
+                        </div>
+                        <div class="radio-option">
+                            <input type="radio" id="pregnancyNA" name="pregnancy" value="na">
+                            <label for="pregnancyNA">Not Applicable</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" id="step3Back">Back</button>
+                    <button type="button" class="btn btn-primary" id="step3Next">Next</button>
+                </div>
+            </div>
+            
+            <!-- Step 4: Review & Submit -->
+            <div class="form-section" id="section-4">
+                <h2>Review Your Information</h2>
+                <p>Please review your information before submitting:</p>
+                
+                <div id="reviewInformation" style="margin: 1.5rem 0; padding: 1.5rem; background-color: #f9f9f9; border-radius: 4px;">
+                    <!-- This will be filled dynamically by JavaScript -->
+                </div>
+                
+                <div class="form-group">
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="consent" name="consent" required>
+                        <label for="consent" class="required">I confirm that all information provided is accurate to the best of my knowledge, and I consent to donate blood in accordance with the guidelines.</label>
+                    </div>
+                    <div class="error-message" id="consent-error">You must provide consent to proceed</div>
+                </div>
+                
+                <div class="btn-group">
+                    <button type="button" class="btn btn-secondary" id="step4Back">Back</button>
+                    <button type="submit" class="btn btn-primary" id="submitForm">Submit Registration</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Form navigation
+            const sections = document.querySelectorAll('.form-section');
+            const steps = document.querySelectorAll('.progress-step');
+            
+            // Show a specific section
+            function showSection(sectionIndex) {
+                sections.forEach((section, index) => {
+                    section.classList.remove('active');
+                    steps[index].classList.remove('active');
+                });
+                
+                sections[sectionIndex].classList.add('active');
+                steps[sectionIndex].classList.add('active');
+            }
+            
+            // Conditional form fields visibility
+            document.querySelectorAll('input[name="donatedBefore"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.getElementById('lastDonationBlock').style.display = 
+                        this.value === 'yes' ? 'block' : 'none';
+                });
+            });
+            
+            document.querySelectorAll('input[name="medicalConditions"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.getElementById('conditionsBlock').style.display = 
+                        this.value === 'yes' ? 'block' : 'none';
+                });
+            });
+            
+            document.querySelectorAll('input[name="medications"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    document.getElementById('medicationsBlock').style.display = 
+                        this.value === 'yes' ? 'block' : 'none';
+                });
+            });
+            
+            // Step 1 validation
+            document.getElementById('step1Next').addEventListener('click', function() {
+                const isValid = validateStep1();
+                if (isValid) {
+                    showSection(1);
+                }
+            });
+            
+            // Step 2 navigation and validation
+            document.getElementById('step2Back').addEventListener('click', function() {
+                showSection(0);
+            });
+            
+            document.getElementById('step2Next').addEventListener('click', function() {
+                const isValid = validateStep2();
+                if (isValid) {
+                    showSection(2);
+                }
+            });
+            
+            // Step 3 navigation and validation
+            document.getElementById('step3Back').addEventListener('click', function() {
+                showSection(1);
+            });
+            
+            document.getElementById('step3Next').addEventListener('click', function() {
+                const isValid = validateStep3();
+                if (isValid) {
+                    // Populate review page
+                    populateReview();
+                    showSection(3);
+                }
+            });
+            
+            // Step 4 navigation
+            document.getElementById('step4Back').addEventListener('click', function() {
+                showSection(2);
+            });
+            
+            // Form submission
+            document.getElementById('donorRegistrationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!document.getElementById('consent').checked) {
+                    document.getElementById('consent-error').style.display = 'block';
+                    return;
+                }
+                
+                // Collect all form data
+                const formData = new FormData(this);
+                const formObject = {};
+                
+                formData.forEach((value, key) => {
+                    formObject[key] = value;
+                });
+                
+                // Here you would typically send the data to your server
+                console.log('Form data ready to submit:', formObject);
+                
+                // Simulating successful submission
+                alert('Registration submitted successfully! We will contact you shortly.');
+                
+                // In a real application, you would use fetch or axios to post data to your backend
+                // fetch('/api/donors/register', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify(formObject)
+                // }).then(response => response.json())
+                //   .then(data => {
+                //     console.log('Success:', data);
+                //     window.location.href = '/registration-success';
+                //   })
+                //   .catch((error) => {
+                //     console.error('Error:', error);
+                //   });
+            });
+            
+            // Form validation functions
+            function validateStep1() {
+                let isValid = true;
+                
+                // Full Name validation
+                const fullNameInput = document.getElementById('fullName');
+                const fullNameError = document.getElementById('fullName-error');
+                
+                if (!fullNameInput.value.trim()) {
+                    fullNameInput.classList.add('error');
+                    fullNameError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    fullNameInput.classList.remove('error');
+                    fullNameError.style.display = 'none';
+                }
+                
+                // Date of Birth validation
+                const dobInput = document.getElementById('dob');
+                const dobError = document.getElementById('dob-error');
+                
+                if (!dobInput.value) {
+                    dobInput.classList.add('error');
+                    dobError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    // Check if age is at least 18
+                    const today = new Date();
+                    const birthDate = new Date(dobInput.value);
+                    let age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+                    
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    
+                    if (age < 18) {
+                        dobInput.classList.add('error');
+                        dobError.style.display = 'block';
+                        isValid = false;
+                    } else {
+                        dobInput.classList.remove('error');
+                        dobError.style.display = 'none';
+                    }
+                }
+                
+                // Gender validation
+                const genderInput = document.getElementById('gender');
+                const genderError = document.getElementById('gender-error');
+                
+                if (!genderInput.value) {
+                    genderInput.classList.add('error');
+                    genderError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    genderInput.classList.remove('error');
+                    genderError.style.display = 'none';
+                }
+                
+                // Blood Type validation
+                const bloodTypeInput = document.getElementById('bloodType');
+                const bloodTypeError = document.getElementById('bloodType-error');
+                
+                if (!bloodTypeInput.value) {
+                    bloodTypeInput.classList.add('error');
+                    bloodTypeError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    bloodTypeInput.classList.remove('error');
+                    bloodTypeError.style.display = 'none';
+                }
+                
+                // Phone validation
+                const phoneInput = document.getElementById('phone');
+                const phoneError = document.getElementById('phone-error');
+                
+                if (!phoneInput.value.trim() || !/^\d{10,15}$/.test(phoneInput.value.replace(/\D/g, ''))) {
+                    phoneInput.classList.add('error');
+                    phoneError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    phoneInput.classList.remove('error');
+                    phoneError.style.display = 'none';
+                }
+                
+                // Email validation
+                const emailInput = document.getElementById('email');
+                const emailError = document.getElementById('email-error');
+                
+                if (!emailInput.value.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value)) {
+                    emailInput.classList.add('error');
+                    emailError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    emailInput.classList.remove('error');
+                    emailError.style.display = 'none';
+                }
+                
+                // Address validation
+                const addressInput = document.getElementById('address');
+                const addressError = document.getElementById('address-error');
+                
+                if (!addressInput.value.trim()) {
+                    addressInput.classList.add('error');
+                    addressError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    addressInput.classList.remove('error');
+                    addressError.style.display = 'none';
+                }
+                
+                return isValid;
+            }
+            
+            function validateStep2() {
+                let isValid = true;
+                
+                // Weight validation
+                const weightInput = document.getElementById('weight');
+                const weightError = document.getElementById('weight-error');
+                
+                if (!weightInput.value || weightInput.value < 50) {
+                    weightInput.classList.add('error');
+                    weightError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    weightInput.classList.remove('error');
+                    weightError.style.display = 'none';
+                }
+                
+                // Donated before validation
+                const donatedYes = document.getElementById('donatedYes');
+                const donatedNo = document.getElementById('donatedNo');
+                const donatedError = document.getElementById('donatedBefore-error');
+                
+                if (!donatedYes.checked && !donatedNo.checked) {
+                    donatedError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    donatedError.style.display = 'none';
+                    
+                    // Last donation date validation
+                    if (donatedYes.checked) {
+                        const lastDonationInput = document.getElementById('lastDonation');
+                        const lastDonationError = document.getElementById('lastDonation-error');
+                        
+                        if (lastDonationInput.value) {
+                            const today = new Date();
+                            const lastDonation = new Date(lastDonationInput.value);
+                            const threeMonthsAgo = new Date();
+                            threeMonthsAgo.setMonth(today.getMonth() - 3);
+                            
+                            if (lastDonation > threeMonthsAgo) {
+                                lastDonationInput.classList.add('error');
+                                lastDonationError.style.display = 'block';
+                                isValid = false;
+                            } else {
+                                lastDonationInput.classList.remove('error');
+                                lastDonationError.style.display = 'none';
+                            }
+                        }
+                    }
+                }
+                
+                // Medical conditions validation
+                const conditionsYes = document.getElementById('conditionsYes');
+                const conditionsNo = document.getElementById('conditionsNo');
+                const conditionsError = document.getElementById('medicalConditions-error');
+                
+                if (!conditionsYes.checked && !conditionsNo.checked) {
+                    conditionsError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    conditionsError.style.display = 'none';
+                }
+                
+                // Medications validation
+                const medicationsYes = document.getElementById('medicationsYes');
+                const medicationsNo = document.getElementById('medicationsNo');
+                const medicationsError = document.getElementById('medications-error');
+                
+                if (!medicationsYes.checked && !medicationsNo.checked) {
+                    medicationsError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    medicationsError.style.display = 'none';
+                }
+                
+                return isValid;
+            }
+            
+            function validateStep3() {
+                // For step 3, we're just ensuring all questions are answered
+                let isValid = true;
+                
+                // Check if all radio button groups have a selection
+                const radioGroups = ['recentIllness', 'recentTattoo', 'recentTravel', 'recentSurgery', 'pregnancy'];
+                
+                radioGroups.forEach(name => {
+                    const radioButtons = document.querySelectorAll(`input[name="${name}"]`);
+                    const isChecked = Array.from(radioButtons).some(radio => radio.checked);
+                    
+                    if (!isChecked && (name !== 'pregnancy' || document.getElementById('gender').value === 'female')) {
+                        isValid = false;
+                        // Highlight the parent group somehow
+                        radioButtons[0].closest('.form-group').style.border = '1px solid var(--primary-color)';
+                    } else {
+                        radioButtons[0].closest('.form-group').style.border = 'none';
+                    }
+                });
+                
+                return isValid;
+            }
+            
+            function populateReview() {
+                const reviewDiv = document.getElementById('reviewInformation');
+                
+                // Get values from the form
+                const formData = {
+                    fullName: document.getElementById('fullName').value,
+                    dob: document.getElementById('dob').value,
+                    gender: document.getElementById('gender').value,
+                    bloodType: document.getElementById('bloodType').value,
+                    phone: document.getElementById('phone').value,
+                    email: document.getElementById('email').value,
+                    address: document.getElementById('address').value,
+                    weight: document.getElementById('weight').value,
+                    donatedBefore: document.querySelector('input[name="donatedBefore"]:checked')?.value || 'No response',
+                    lastDonation: document.getElementById('lastDonation').value || 'N/A',
+                    medicalConditions: document.querySelector('input[name="medicalConditions"]:checked')?.value || 'No response',
+                    conditionsList: document.getElementById('conditionsList').value || 'N/A',
+                    medications: document.querySelector('input[name="medications"]:checked')?.value || 'No response',
+                    medicationsList: document.getElementById('medicationsList').value || 'N/A',
+                    recentIllness: document.querySelector('input[name="recentIllness"]:checked')?.value || 'No response',
+                    recentTattoo: document.querySelector('input[name="recentTattoo"]:checked')?.value || 'No response',
+                    recentTravel: document.querySelector('input[name="recentTravel"]:checked')?.value || 'No response',
+                    recentSurgery: document.querySelector('input[name="recentSurgery"]:checked')?.value || 'No response',
+                    pregnancy: document.querySelector('input[name="pregnancy"]:checked')?.value || 'No response'
+                };
+                
+                // Format date of birth
+                const dobDate = new Date(formData.dob);
+                const formattedDob = dobDate.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                // Calculate eligibility status based on responses
+                let eligibilityStatus = 'Eligible';
+                let eligibilityNotes = [];
+                
+                if (formData.recentIllness === 'yes') {
+                    eligibilityStatus = 'Temporary Deferral';
+                    eligibilityNotes.push('Recent illness in the past 14 days');
+                }
+                
+                if (formData.recentTattoo === 'yes') {
+                    eligibilityStatus = 'Temporary Deferral';
+                    eligibilityNotes.push('Recent tattoo or piercing in the past 6 months');
+                }
+                
+                if (formData.recentTravel === 'yes') {
+                    eligibilityStatus = 'Requires Assessment';
+                    eligibilityNotes.push('Recent travel to malaria-endemic area');
+                }
+                
+                if (formData.recentSurgery === 'yes') {
+                    eligibilityStatus = 'Temporary Deferral';
+                    eligibilityNotes.push('Recent surgery in the past 12 months');
+                }
+                
+                if (formData.pregnancy === 'yes') {
+                    eligibilityStatus = 'Temporary Deferral';
+                    eligibilityNotes.push('Pregnancy or recent childbirth');
+                }
+                
+                if (formData.weight < 50) {
+                    eligibilityStatus = 'Not Eligible';
+                    eligibilityNotes.push('Weight below minimum requirement');
+                }
+                
+                // Build HTML for review
+                let reviewHTML = `
+                    <div style="margin-bottom: 1.5rem;">
+                        <h3>Personal Information</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <p><strong>Name:</strong> ${formData.fullName}</p>
+                            <p><strong>Date of Birth:</strong> ${formattedDob}</p>
+                            <p><strong>Gender:</strong> ${formData.gender}</p>
+                            <p><strong>Blood Type:</strong> ${formData.bloodType}</p>
+                            <p><strong>Phone:</strong> ${formData.phone}</p>
+                            <p><strong>Email:</strong> ${formData.email}</p>
+                        </div>
+                        <p><strong>Address:</strong> ${formData.address}</p>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h3>Health Information</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <p><strong>Weight:</strong> ${formData.weight} kg</p>
+                            <p><strong>Donated Before:</strong> ${formData.donatedBefore === 'yes' ? 'Yes' : 'No'}</p>
+                            ${formData.donatedBefore === 'yes' ? `<p><strong>Last Donation:</strong> ${formData.lastDonation}</p>` : ''}
+                            <p><strong>Medical Conditions:</strong> ${formData.medicalConditions === 'yes' ? 'Yes' : 'No'}</p>
+                            ${formData.medicalConditions === 'yes' ? `<p><strong>Conditions:</strong> ${formData.conditionsList}</p>` : ''}
+                            <p><strong>Medications:</strong> ${formData.medications === 'yes' ? 'Yes' : 'No'}</p>
+                            ${formData.medications === 'yes' ? `<p><strong>Medications List:</strong> ${formData.medicationsList}</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <h3>Eligibility Assessment</h3>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <p><strong>Recent Illness:</strong> ${formData.recentIllness === 'yes' ? 'Yes' : 'No'}</p>
+                            <p><strong>Recent Tattoo/Piercing:</strong> ${formData.recentTattoo === 'yes' ? 'Yes' : 'No'}</p>
+                            <p><strong>Recent Travel:</strong> ${formData.recentTravel === 'yes' ? 'Yes' : 'No'}</p>
+                            <p><strong>Recent Surgery:</strong> ${formData.recentSurgery === 'yes' ? 'Yes' : 'No'}</p>
+                            ${formData.gender === 'female' ? `<p><strong>Pregnancy Status:</strong> ${formData.pregnancy === 'yes' ? 'Yes' : formData.pregnancy === 'no' ? 'No' : 'N/A'}</p>` : ''}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem; padding: 1rem; background-color: ${eligibilityStatus === 'Eligible' ? '#e8f5e9' : eligibilityStatus === 'Temporary Deferral' ? '#fff3e0' : '#ffebee'}; border-radius: 4px;">
+                        <p><strong>Preliminary Eligibility Status:</strong> ${eligibilityStatus}</p>
+                        ${eligibilityNotes.length > 0 ? `<p><strong>Notes:</strong> ${eligibilityNotes.join(', ')}</p>` : ''}
+                        <p style="font-style: italic; margin-top: 0.5rem;">Final eligibility will be determined during your in-person assessment.</p>
+                    </div>
+                `;
+                
+                reviewDiv.innerHTML = reviewHTML;
+            }
+        });
+    </script>
+</body>
+</html>

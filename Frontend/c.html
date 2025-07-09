@@ -453,6 +453,67 @@
     </style>
 </head>
 <body>
+    <script>
+        // Check if user is authenticated
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'B.html'; // Redirect to login if no token
+                return;
+            }
+            
+            // Load user data
+            const userData = JSON.parse(localStorage.getItem('userData'));
+            document.getElementById('userName').textContent = userData.name;
+            loadDashboardData();
+        }
+
+        // Load dashboard data
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('http://127.0.0.1:5000/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to load profile data');
+                }
+
+                const data = await response.json();
+                // Update dashboard UI with user data
+                updateDashboardUI(data);
+            } catch (error) {
+                console.error('Dashboard error:', error);
+            }
+        }
+
+        // Update dashboard UI
+        function updateDashboardUI(data) {
+            // Update profile information
+            if (data.donor) {
+                document.getElementById('bloodType').textContent = data.donor.blood_type;
+                document.getElementById('lastDonation').textContent = 
+                    data.donor.last_donation_date ? new Date(data.donor.last_donation_date).toLocaleDateString() : 'No donations yet';
+            }
+            
+            // Update other dashboard elements
+            document.getElementById('email').textContent = data.email;
+            document.getElementById('joinDate').textContent = new Date(data.created_at).toLocaleDateString();
+        }
+
+        // Handle logout
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userData');
+            window.location.href = 'B.html';
+        }
+
+        // Call checkAuth when page loads
+        document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
     <div class="container">
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
@@ -499,8 +560,7 @@
                             <h3 class="card-title">Total Donors</h3>
                             <div class="card-icon bg-primary">👨‍⚕️</div>
                         </div>
-                        <div class="card-body">
-                            <div class="card-value">1,240</div>
+                        <div class="card-body">   <div class="card-value">1,240</div>
                             <div class="card-label">Registered Donors</div>
                         </div>
                     </div>
@@ -560,7 +620,7 @@
             </div>
 
             <!-- Donor Management Page -->
-            <div class="page" id="donors-page">
+            <div class="page" id="donorspage">
                 <h2>Donor Management</h2>
                 <button class="btn btn-primary" id="addDonorBtn">+ Add New Donor</button>
                 
@@ -635,7 +695,7 @@
                     
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">B+</h3>
+                            <h3 class="card-title">B+</</h3>
                             <div class="card-icon bg-danger">🧪</div>
                         </div>
                         <div class="card-body">
@@ -651,6 +711,50 @@
                         </div>
                         <div class="card-body">
                             <div class="card-value">32</div>
+                            <div class="card-label">Units</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">A-</h3>
+                            <div class="card-icon bg-danger">🧪</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-value">46</div>
+                            <div class="card-label">Units</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">B-</h3>
+                            <div class="card-icon bg-danger">🧪</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-value">76</div>
+                            <div class="card-label">Units</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">0-</h3>
+                            <div class="card-icon bg-danger">🧪</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-value">70</div>
+                            <div class="card-label">Units</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">AB-</h3>
+                            <div class="card-icon bg-danger">🧪</div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-value">80</div>
                             <div class="card-label">Units</div>
                         </div>
                     </div>
@@ -674,12 +778,31 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
-                        <tbody id="donationsTable"></tbody>
+                        <tbody id="donationsTable">
+                            <!-- Results will be populated here -->
+                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
+    
+    <!--User Pannel-->
+    <div class="user-profile">
+        <div class="user-avatar">AD</div>
+        <span class="user-name">Admin User</span>
+    <ul class="sidebar-menu">
+        <li><a href="#" class="active"><i class="fas fa-home"></i> Overview</a></li>
+        <li><a href="#"><i class="fas fa-calendar-alt"></i> Appointments</a></li>
+        <li><a href="#"><i class="fas fa-history"></i> Donation History</a></li>
+        <li><a href="#"><i class="fas fa-user"></i> My Profile</a></li>
+        <li><a href="#"><i class="fas fa-trophy"></i> Achievements</a></li>
+        <li><a href="#"><i class="fas fa-map-marker-alt"></i> Donation Centers</a></li>
+        <li><a href="#"><i class="fas fa-question-circle"></i> Help & Support</a></li>
+    </ul>
+</div>
+</div>
+</div>
 
     <!-- Notifications Panel -->
     <div class="notifications-panel" id="notifications-panel">
@@ -701,8 +824,8 @@
             <div class="notification-desc">Emergency request #2845 has been fulfilled</div>
             <div class="notification-time">Yesterday</div>
         </div>
+        <button class="notification-item"><a href="g.html">For View More</a></button>
     </div>
-
     <!-- Add Donor Modal -->
     <div class="modal" id="addDonorModal">
         <div class="modal-content">
@@ -739,6 +862,19 @@
         </div>
     </div>
 
+    <!-- Add these elements in the appropriate sections of your dashboard -->
+<div class="user-profile">
+    <h2>Welcome, <span id="userName">User</span></h2>
+    <div class="profile-info">
+        <p>Blood Type: <span id="bloodType">-</span></p>
+        <p>Last Donation: <span id="lastDonation">-</span></p>
+        <p>Email: <span id="email">-</span></p>
+        <p>Member Since: <span id="joinDate">-</span></p>
+    </div>
+</div>
+
+<button onclick="logout()" class="btn btn-danger">Logout</button>
+
     <script>
         // Sample data and event listeners
         document.addEventListener('DOMContentLoaded', function() {
@@ -771,6 +907,10 @@
             // Toggle notifications panel
             document.getElementById('notification-bell').addEventListener('click', function() {
                 document.getElementById('notifications-panel').classList.toggle('show');
+            });
+
+            document.getElementById('user-profile').addEventListener('click', function() {
+                document.getElementById('sidebar-menu').classList.toggle('show');
             });
             
             // Modal handling

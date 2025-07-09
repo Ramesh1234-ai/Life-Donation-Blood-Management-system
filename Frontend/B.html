@@ -43,7 +43,7 @@
         
         .login-image {
             flex: 1;
-            background: url('/api/placeholder/500/800') center/cover no-repeat;
+            background: url('https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80') center/cover no-repeat;
             position: relative;
             display: flex;
             align-items: center;
@@ -331,6 +331,26 @@
             }
         }
         
+        /* Error message styling */
+        .error-message {
+            color: var(--primary);
+            margin-top: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: none;
+        }
+        
+        /* Password toggle */
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6c757d;
+        }
+        
         /* Responsive Design */
         @media (max-width: 768px) {
             .login-container {
@@ -346,6 +366,21 @@
                 padding: 2rem;
             }
         }
+        .error-message {
+        color: #dc3545;
+        background-color: #f8d7da;
+        border: 1px solid #f5c6cb;
+        padding: 10px;
+        border-radius: 4px;
+        margin-top: 15px;
+        display: none;
+    }
+
+    .error-message.success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
     </style>
 </head>
 <body>
@@ -359,7 +394,7 @@
             <div class="image-content">
                 <h2>Welcome to LifeDrop</h2>
                 <p>Your contribution can save lives. Login to donate blood or request for blood and be part of our life-saving community.</p>
-                <img src="/api/placeholder/150/150" alt="Blood Donation Logo" style="filter: brightness(0) invert(1); width: 150px;">
+                <img src="/images/drop-life-nature-green-50385118.webp" alt="Blood Donation Logo" style="filter: brightness(0) invert(1); width: 150px;">
             </div>
         </div>
         
@@ -383,23 +418,25 @@
                     <div class="input-group">
                         <i class="fas fa-lock"></i>
                         <input type="password" id="password" class="form-control" placeholder="Enter your password" required>
+                        <i class="password-toggle fas fa-eye" id="togglePassword"></i>
                     </div>
                 </div>
                 
                 <div class="forgot-password">
-                    <a href="#">Forgot password?</a>
+                    <a href="forgot-password.html">Forgot password?</a>
                 </div>
                 
                 <button type="submit" class="btn btn-primary">Login</button>
+                <div class="error-message" id="errorMessage"></div>
             </form>
             
             <div class="login-options">Or login with</div>
             
             <div class="social-login">
-                <button class="social-btn facebook">
+                <button type="button" class="social-btn facebook">
                     <i class="fab fa-facebook-f"></i> Facebook
                 </button>
-                <button class="social-btn google">
+                <button type="button" class="social-btn google">
                     <i class="fab fa-google"></i> Google
                 </button>
             </div>
@@ -407,148 +444,82 @@
             <div class="register-link">
                 Don't have an account? <a href="register.html">Register now</a>
             </div>
-        </div>
+            <!-- Add this to your registration form -->
+<div class="form-group">
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="notificationConsent" checked>
+        <label class="form-check-label" for="notificationConsent">Receive email notifications about blood requests</label>
     </div>
-    
-    <script>
-// Enhanced login form script
-const loginForm = document.getElementById('loginForm');
-const emailInput = document.getElementById('email');
-const passwordInput = document.getElementById('password');
-const loginBtn = document.querySelector('.btn-primary');
-const errorElement = document.createElement('div');
+</div>
+    </div>
+</div>
+</div>
+</div>
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const loginBtn = document.querySelector('.btn-primary');
+    const errorMessage = document.getElementById('errorMessage');
 
-// Add error element to form
-errorElement.className = 'error-message';
-errorElement.style.color = 'var(--primary)';
-errorElement.style.marginTop = '10px';
-errorElement.style.display = 'none';
-loginBtn.after(errorElement);
-
-// Form validation function
-function validateForm() {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    
-    if (!email) {
-        showError('Email is required');
-        return false;
-    }
-    
-    if (!isValidEmail(email)) {
-        showError('Please enter a valid email address');
-        return false;
-    }
-    
-    if (!password) {
-        showError('Password is required');
-        return false;
-    }
-    
-    hideError();
-    return true;
-}
-
-// Email validation helper
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
-
-// Show error message
-function showError(message) {
-    errorElement.textContent = message;
-    errorElement.style.display = 'block';
-}
-
-// Hide error message
-function hideError() {
-    errorElement.style.display = 'none';
-}
-
-// Handle form submission
-loginForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    // Validate form
-    if (!validateForm()) {
-        return;
-    }
-    
-    const email = emailInput.value.trim();
-    const password = passwordInput.value;
-    
-    // Update button state
-    loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
-    loginBtn.disabled = true;
-    
-    try {
-        // Send request to backend
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
+    async function handleLogin(e) {
+        e.preventDefault();
         
-        const data = await response.json();
-        
-        if (!response.ok) {
-            throw new Error(data.message || 'Authentication failed');
+        if (!validateForm()) {
+            return;
         }
         
-        if (data.token) {
-            // Store token in localStorage for future authenticated requests
-            localStorage.setItem('authToken', data.token);
-            
-            // Store user data if needed
-            if (data.user) {
-                localStorage.setItem('userData', JSON.stringify(data.user));
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+        
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+        loginBtn.disabled = true;
+        
+        try {
+            const response = await fetch('http://127.0.0.1:5000/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Login failed');
             }
+
+            // Store authentication data
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('userData', JSON.stringify(data.user));
             
-            // Add a redirect delay to show success
             showSuccess('Login successful! Redirecting...');
             
-            // Redirect to dashboard
+            // Redirect based on user role
             setTimeout(() => {
-                window.location.href = 'dashboard.html';
-            }, 1000);
-        } else {
-            throw new Error('Login failed: No authentication token received');
+                if (data.user.role === 'donor') {
+                    window.location.href = 'c.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            }, 1500);
+
+        } catch (error) {
+            console.error('Login error:', error);
+            showError(error.message);
+        } finally {
+            loginBtn.innerHTML = 'Login';
+            loginBtn.disabled = false;
         }
-    } catch (error) {
-        console.error('Login error:', error);
-        showError(error.message || 'Login failed. Please try again.');
-    } finally {
-        // Reset button state
-        loginBtn.innerHTML = 'Login';
-        loginBtn.disabled = false;
     }
-});
 
-// Show success message
-function showSuccess(message) {
-    errorElement.textContent = message;
-    errorElement.style.color = '#28a745';
-    errorElement.style.display = 'block';
-}
-
-// Add input event listeners to clear error when user types
-emailInput.addEventListener('input', hideError);
-passwordInput.addEventListener('input', hideError);
-
-// Add animation to form fields when focused
-const formControls = document.querySelectorAll('.form-control');
-formControls.forEach(input => {
-    input.addEventListener('focus', () => {
-        input.classList.add('animated');
-    });
-    
-    input.addEventListener('blur', () => {
-        input.classList.remove('animated');
-    });
-});
-         </script>
+    loginForm.addEventListener('submit', handleLogin);
+</script>
 </body>
 </html>

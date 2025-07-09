@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LifeDrop Blood Donation Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        :root {
+            --primary: #e63946;
+            --secondary: #f1faee;
+            --dark: #1d3557;
+            --light: #a8dadc;
+            --accent: #457b9d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f8f9fa;
+            overflow-x: hidden;
+        }
+        
+        .navbar {
+            background-color: var(--primary);
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        .logo i {
+            margin-right: 0.5rem;
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+        
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            bottom: -5px;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .mobile-menu-btn {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .btn {
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            outline: none;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            box-shadow: 0 4px 8px rgba(230, 57, 70, 0.2);
+        }
+        
+        .btn-primary:hover {
+            background-color: #d32f3d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(230, 57, 70, 0.3);
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .page-header {
+            height: 50vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/api/placeholder/1200/600') center/cover no-repeat;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin-top: 60px;
+        }
+        
+        .page-header-content {
+            max-width: 800px;
+            padding: 2rem;
+        }
+        
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .page-header h1::after {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: -10px;
+            left: 20%;
+        }
+        
+        .page-header p {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .section {
+            padding: 5rem 1rem;
+        }
+        
+        .section-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .section-title h2 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            width: 50%;
+            height: 3px;
+            background-color: var(--primary);
+            bottom: -10px;
+            left: 25%;
+        }
+        
+        .section-title p {
+            color: #6c757d;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .about-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .about-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .about-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .about-card:hover .about-img img {
+            transform: scale(1.1);
+        }
+        
+        .about-content {
+            padding: 1.5rem;
+        }
+        
+        .about-content h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .about-content p {
+            color: #6c757d;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .mission-vision {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .mission, .vision {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .mission:hover, .vision:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .mission-icon, .vision-icon {
+            background-color: var(--primary);
+            color: white;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .mission h3, .vision h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+        }
+        
+        .mission p, .vision p {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .team-section {
+            background-color: #f9f9f9;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .team-member {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .team-member:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .member-img {
+            height: 250px;
+            overflow: hidden;
+        }
+        
+        .member-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .team-member:hover .member-img img {
+            transform: scale(1.1);
+        }
+        
+        .member-info {
+            padding: 1.5rem;
+        }
+        
+        .member-info h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .member-info p {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .member-info .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .member-info .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 35px;
+            height: 35px;
+            background-color: var(--light);
+            color: var(--dark);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .member-info .social-links a:hover {
+            background-color: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+        
+        .impact-section {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .impact-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            text-align: center;
+        }
+        
+        .impact-item {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .impact-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .impact-icon {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .impact-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .impact-text {
+            font-size: 1.1rem;
+            color: #6c757d;
+        }
+        
+        .testimonials {
+            background-color: var(--dark);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .testimonial-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .testimonial-slides {
+            display: flex;
+            overflow-x: hidden;
+        }
+        
+        .testimonial-slide {
+            min-width: 100%;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+        
+        .testimonial-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            border: 3px solid var(--primary);
+        }
+        
+        .testimonial-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .testimonial-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .testimonial-text::before {
+            content: '"';
+            font-size: 3rem;
+            position: absolute;
+            left: -20px;
+            top: -20px;
+            color: var(--primary);
+            opacity: 0.3;
+        }
+        
+        .testimonial-text::after {
+            content: '"';
+            font-size: 3rem;
+            position: absolute;
+            right: -20px;
+            bottom: -50px;
+            color: var(--primary);
+            opacity: 0.3;
+        }
+        
+        .testimonial-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.3rem;
+        }
+        
+        .testimonial-title {
+            color: var(--light);
+            font-style: italic;
+        }
+        
+        .dots-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            margin: 0 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background-color: var(--primary);
+            transform: scale(1.5);
+        }
+        
+        .partners-section {
+            background-color: #f9f9f9;
+        }
+        
+        .partners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .partner-item {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .partner-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .partner-logo {
+            max-width: 100%;
+            height: 60px;
+            object-fit: contain;
+            filter: grayscale(100%);
+            transition: all 0.3s ease;
+        }
+        
+        .partner-item:hover .partner-logo {
+            filter: grayscale(0%);
+        }
+        
+        .timeline-section {
+            overflow: hidden;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem 0;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 3px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .timeline-item {
+            padding: 1rem 2rem;
+            position: relative;
+            width: 50%;
+            margin-bottom: 2rem;
+        }
+        
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: white;
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            top: 20px;
+            transform: translateX(-50%);
+            z-index: 1;
+        }
+        
+        .left {
+            left: 0;
+        }
+        
+        .right {
+            left: 50%;
+        }
+        
+        .left::after {
+            left: 100%;
+        }
+        
+        .right::after {
+            left: 0;
+        }
+        
+        .timeline-content {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-title {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        .timeline-desc {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+        
+        .cta-section {
+            background: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('/api/placeholder/1200/400') center/cover no-repeat;
+            color: white;
+            text-align: center;
+            padding: 5rem 1rem;
+        }
+        
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .cta-content p {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .footer {
+            background-color: #333;
+            color: white;
+            padding: 3rem 1rem;
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+        
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: var(--primary);
+            bottom: -8px;
+            left: 0;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+        
+        .contact-info {
+            list-style: none;
+        }
+        
+        .contact-info li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .contact-info i {
+            margin-right: 0.8rem;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-top: 3px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-links a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 40px;
+            height: 40px;
+            background-color: #444;
+            color: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--primary);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid #444;
+            margin-top: 3rem;
+        }
+        
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        .fade-in.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 1rem;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - 60px);
+                background-color: var(--primary);
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+                transition: all 0.4s ease;
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .nav-links li {
+                margin: 1.5rem 0;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .page-header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            
+            .timeline-item::after {
+                left: 30px;
+            }
+            
+            .right {
+                left: 0%;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">
+                <i class="fas fa-tint"></i>
+                <span>LifeDrop</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="A.html">Home</a></li>
+                <li><a href="about.html" class="active">About</a></li>
+                <li><a href="D.html">Donate</a></li>
+                <li><a href="e.html">Request</a></li>
+                <li><a href="h.html">Contact</a></li>
+                <li><a href="B.html">Login</a></li>
+                <li><a href="y.html">Payment</a></li>
+            </ul>
+            <div class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Page Header -->
+    <section class="page-header">
+        <div class="page-header-content animate__animated animate__fadeIn">
+            <h1>About LifeDrop</h1>
+            <p>We are on a mission to bridge the gap between blood donors and those in need, saving lives one donation at a time.</p>
+        </div>
+    </section>
+    
+    <!-- Our Story Section -->
+    <section class="section">
+        <div class="section-container">
+            <div class="section-title fade-in">
+                <h2>Our Story</h2>
+                <p>The journey of creating a life-saving platform</p>
+            </div>
+            
+            <div class="about-grid">
+                <div class="about-card fade-in">
+                    <div class="about-img">
+                        <img src="/images/drop-life-nature-green-50385118.webp" >
+                    </div>
+                    <div class="about-content">
+                        <h3>The Beginning</h3>
+                        <p>LifeDrop was founded in 2020 by a group of healthcare professionals and technology experts who recognized the critical need for an efficient blood donation management system. Our founders witnessed firsthand the challenges in blood donation logistics and decided to create a solution.</p>
+                    </div>
+                </div>
+                
+                <div class="about-card fade-in">
+                    <div class="about-img">
+                        <img src="/images/wp5871043-laptop-4k-wallpapers.jpg" >
+                    </div>
+                    <div class="about-content">
+                        <h3>Our Evolution</h3>
+                        <p>What started as a simple platform has evolved into a comprehensive blood donation management system with advanced features like real-time inventory tracking, intelligent donor-recipient matching, and an intuitive user interface that makes the donation process smooth and efficient.</p>
+                    </div>
+                </div>
+                
+                <div class="about-card fade-in">
+                    <div class="about-img">
+                        <img src="/images/Screenshot 2023-07-22 163402.png" >
+                    </div>
+                    <div class="about-content">
+                        <h3>LifeDrop Today</h3>
+                        <p>Today, LifeDrop serves over 500 hospitals and blood banks nationwide, connecting thousands of donors with recipients in need. Our platform has facilitated over 12,500 successful donations, directly contributing to saving more than 10,000 lives across the country.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Mission & Vision Section -->
+    <section class="section" style="background-color: #f9f9f9;">
+        <div class="section-container">
+            <div class="section-title fade-in">
+                <h2>Mission & Vision</h2>
+                <p>Our guiding principles and future aspirations</p>
+            </div>
+            
+            <div class="mission-vision">
+                <div class="mission fade-in">
+                    <div class="mission-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Our Mission</h3>
+                    <p>To create a seamless bridge between blood donors and recipients through innovative technology, ensuring that no life is lost due to blood shortage. We aim to make blood donation an easy, accessible, and rewarding experience for everyone, while ensuring that every drop of donated blood reaches those who need it most efficiently.</p>
+                </div>
+                
+                <div class="vision fade-in">
+                    <div class="vision-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h3>Our Vision</h3>
+                    <p>We envision a world where blood shortages are eliminated, where every patient receives the blood they need when they need it, and where blood donation becomes a regular part of people's lives. We strive to be the most trusted and efficient blood donation management system globally, leveraging technology to save millions of lives.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Our Team Section -->
+    <section class="section team-section">
+        <div class="section-container">
+            <div class="section-title fade-in">
+                <h2>Our Team</h2>
+                <p>Meet the dedicated professionals behind LifeDrop</p>
+            </div>
+            
+            <div class="team-grid">
+                <div class="team-member fade-in">
+                    <div class="member-img">
+                        <img src="/images/images.jpeg" >
+                    </div>
+                    <div class="member-info">
+                        <h3>Samta Tanwar</h3>
+                        <p>Backend Devloper</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member fade-in">
+                    <div class="member-img">
+                        <img src="/images/Kavya-Maran-17-SRH_664d7c3022921.webp" >
+                    </div>
+                    <div class="member-info">
+                        <h3>Samridhi Chakravarthy</h3>
+                        <p>System Documentation</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member fade-in">
+                    <div class="member-img">
+                        <img src="/images/0x0.webp" >
+                    </div>
+                    <div class="member-info">
+                        <h3>Risabh Sharma</h3>
+                        <p>FrontEnd Devloper</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="team-member fade-in">
+                    <div class="member-img">
+                        <img src="/images/1516569075875.jpeg" >
+                    </div>
+                    <div class="member-info">
+                        <h3>Rishit</h3>
+                        <p>Backend Devloper</p>
+                        <div class="social-links">
+                            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fas fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Our Impact Section -->
+    <section class="section impact-section">
+        <div class="section-container">
+            <div class="section-title fade-in">
+                <h2>Our Impact</h2>
+                <p>The difference we're making together</p>
+            </div>
+            
+            <div class="impact-stats">
+                <div class="impact-item fade-in">
+                    <div class="impact-icon">
+                        <i class="fas fa-user-friends"></i>
+                    </div>
+                    <div class="impact-number">25,000+</div>
+                    <div class="impact-text">Registered Donors</div>
+                </div>
+                
+                <div class="impact-item fade-in">
+                    <div class="impact-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="impact-number">12,500+</div>
+                    <div class="impact-text">Successful Donations</div>
+                </div>
+                
+                <div class="impact-item fade-in">
+                    <div class="impact-icon">
+                        <i class="fas fa-hospital"></i>
+                    </div>
+                    <div class="impact-number">500+</div>
+                    <div class="impact-text">Partner Institutions</div>
+                </div>
+                
+                <div class="impact-item fade-in">
+                    <div class="impact-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <div class="impact-number">10,000+</div>
+                    <div class="impact-text">Lives Saved</div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="section testimonials">
+        <div class="section-container">
+            <div class="section-title fade-in">
+                <h2>Testimonials</h2>
+                <p>What our users say about us</p>
+            </div>
+            
+            <div class="testimonial-container fade-in">
+                <div class="testimonial-slides">
+                    <div class="testimonial-slide active">
+                        <div class="testimonial-img">
+                            <img src="/images/WhatsApp Image 2023-08-01 at 12.58_edited.jpg">
+                        </div>
+                        <div class="testimonial-text">
+                            "LifeDrop made it incredibly easy for me to donate blood. The process was smooth, and I could track exactly where my donation went."
+                        </div>
+                        <div class="testimonial-name">John Doe</div>
+                        <div class="testimonial-title">Regular Donor</div>
+                    </div>
+                    
+                    <div class="testimonial-slide active">
+                        <div class="testimonial-img">
+                            <img src="/images/Screenshot 2024-10-20 231420.png">
+                        </div>
+                        <div class="testimonial-text">
+                            "As a hospital administrator, LifeDrop has revolutionized how we manage blood inventory."
+                        </div>
+                        <div class="testimonial-name">Maria Garcia</div>
+                        <div class="testimonial-title">Hospital Administrator</div>
+                    </div>
+                    
+                    <div class="testimonial-slide active">
+                        <div class="testimonial-img">
+                            <img src="/api/placeholder/200/200" alt="Robert Chen">
+                        </div>
+                        <div class="testimonial-text">
+                            "When my daughter needed emergency blood transfusions, LifeDrop helped us find donors quickly. I'm forever grateful to this platform and now I'm a regular donor myself."
+                        </div>
+                        <div class="testimonial-name">Robert Chen</div>
+                        <div class="testimonial-title">Father &amp; Donor</div>
+                    </div>
+                </div>
+                
+                <div class="dots-container">
+                    <div class="dot active" data-slide="0"></div>
+                    <div class="dot" data-slide="1"></div>
+                    <div class="dot" data-slide="2"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Partners Section -->
+    <section class="section partners-section">
+        <div class="section-container">
+            <div class="section-title fade-in">
+                <h2>Our Partners</h2>
+                <p>Collaborating to make a difference</p>
+            </div>
+            
+            <div class="partners-grid">
+                <div class="partner-item fade-in">
+                    <img src="/images/Screenshot 2024-01-21 092142.png" alt="Partner 1" class="partner-logo">
+                </div>
+                <div class="partner-item fade-in">
+                    <img src="/images/Screenshot 2024-02-08 220727.png" alt="Partner 2" class="partner-logo">
+                </div>
+                <div class="partner-item fade-in">
+                    <img src="/images/Screenshot 2024-02-11 113248.png" alt="Partner 3" class="partner-logo">
+                </div>
+                <div class="partner-item fade-in">
+                    <img src="/images/Screenshot 2024-02-29 183624.png" alt="Partner 4" class="partner-logo">
+                </div>
+                <div class="partner-item fade-in">
+                    <img src="/images/Screenshot 2024-10-20 214049.png" alt="Partner 5" class="partner-logo">
+                </div>
+                <div class="partner-item fade-in">
+                    <img src="/images/Screenshot 2024-11-30 193708.png" alt="Partner 6" class="partner-logo">
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- History Timeline Section -->
+    <section class="section timeline-section">
+        <div class="section-container">
+            <div class="section-title fade-in">
+                <h2>Our Journey</h2>
+                <p>Key milestones in our history</p>
+            </div>
+            
+            <div class="timeline">
+                <div class="timeline-item left fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-date">January 2020</div>
+                        <h3 class="timeline-title">The Inception</h3>
+                        <p class="timeline-desc">LifeDrop was conceived by Dr. Sarah Johnson and a team of dedicated professionals to address the critical challenges in blood donation logistics.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-date">June 2020</div>
+                        <h3 class="timeline-title">Beta Launch</h3>
+                        <p class="timeline-desc">The first version of LifeDrop was launched with basic functionality and tested with 5 local hospitals.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-date">March 2021</div>
+                        <h3 class="timeline-title">Full Launch</h3>
+                        <p class="timeline-desc">LifeDrop officially launched nationwide with expanded features and partnerships with 50+ hospitals.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-date">November 2021</div>
+                        <h3 class="timeline-title">1,000th Donation</h3>
+                        <p class="timeline-desc">We celebrated our 1,000th successful blood donation, a major milestone in our journey.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-date">August 2022</div>
+                        <h3 class="timeline-title">Mobile App Launch</h3>
+                        <p class="timeline-desc">The LifeDrop mobile app was released, making blood donation even more accessible.</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right fade-in">
+                    <div class="timeline-content">
+                        <div class="timeline-date">February 2023</div>
+                        <h3 class="timeline-title">National Recognition</h3>
+                        <p class="timeline-desc">LifeDrop received the National Healthcare Innovation Award for our contribution to blood donation systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Call to Action Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Join Our Life-Saving Mission</h2>
+            <p>Whether you're a donor, a healthcare institution, or someone who needs blood, LifeDrop is here to connect and serve you. Together, we can save more lives.</p>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Become a Donor</a>
+                <a href="#" class="btn btn-outline">Partner With Us</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>LifeDrop</h3>
+                <p>Bridging the gap between blood donors and recipients through innovative technology, ensuring that no life is lost due to blood shortage.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">About</a></li>
+                    <li><a href="#">Donate Blood</a></li>
+                    <li><a href="#">Request Blood</a></li>
+                    <li><a href="#">Find Donation Centers</a></li>
+                    <li><a href="#">Blog</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Contact Us</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> 123 Healthcare Ave, Medical District, CA 91234</li>
+                    <li><i class="fas fa-phone"></i> (555) 123-4567</li>
+                    <li><i class="fas fa-envelope"></i> info@lifedrop.com</li>
+                    <li><i class="fas fa-clock"></i> Mon-Fri: 9AM-5PM</li>
+                </ul>
+            </div>
+            
+            <div class="footer-section">
+                <h3>Newsletter</h3>
+                <p>Subscribe to our newsletter for updates on blood drives, success stories, and tips.</p>
+                <form action="#" method="post">
+                    <input type="email" name="email" placeholder="Your Email" required style="width: 100%; padding: 0.8rem; margin: 0.5rem 0; border-radius: 5px; border: none;">
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            <p>&copy; 2023 LifeDrop Blood Donation Management System. All Rights Reserved.</p>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+        });
+        
+        // Fade-in Animation
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementTop < windowHeight - 100) {
+                    element.classList.add('active');
+                }
+            });
+        };
+        
+        // Initial check
+        fadeInOnScroll();
+        
+        // Add scroll event listener
+        window.addEventListener('scroll', fadeInOnScroll);
+        
+        // Testimonial Slider
+        const dots = document.querySelectorAll('.dot');
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const slidesContainer = document.querySelector('.testimonial-slides');
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                // Update active dot
+                document.querySelector('.dot.active').classList.remove('active');
+                dot.classList.add('active');
+                
+                // Move slides
+                slidesContainer.style.transform = `translateX(-${index * 100}%)`;
+                
+                // Update active slide
+                document.querySelector('.testimonial-slide.active').classList.remove('active');
+                slides[index].classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
